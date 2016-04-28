@@ -1,6 +1,9 @@
 #ifndef IO_H
 #define IO_H
 
-void draw_board(void);
+#include "datastructures.h"
 
-#endif /* IO_H */
+void drawEntity(struct entity *entity);
+void drawBoard(void);
+
+#endif
