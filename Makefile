@@ -8,6 +8,7 @@ EXE		=spaceinvaders
 
 SRC 	=$(wildcard src/*.c)
 DEP		=$(SRC:%.c=%.d)
+CLDEP	=$(SRC:%.c=%.d-e)
 OBJ		=$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 INC		=-I./$(INCDIR)/
 
@@ -39,6 +40,7 @@ build/%.o: %.c
 
 clean:
 	-rm $(EXE) $(OBJ) $(DEP)
+	-rm -f $(CLDEP)
 	-rm -r $(OBJDIR)
 
 $(OBJDIR):
