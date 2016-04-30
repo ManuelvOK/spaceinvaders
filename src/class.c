@@ -2,29 +2,13 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <assert.h>
-#include "dict.h"
-#include "dict.c"
+
+#include <class.h>
+#include <dict.h>
 
 struct class;
-struct method;
 struct object;
-
-struct class {
-    struct class *superclass;
-    void (*initialiser)(struct object *);
-    void (*finaliser)(struct object *);
-    struct dict *methods;
-};
-
-struct object{
-    struct class *class;
-    struct dict *data;
-};
-
-struct method {
-    unsigned int argc;
-    void *(*function)(struct object *, va_list);
-};
+struct method;
 
 struct class *create_class(struct class *superclass, void (*initialiser)(struct object *), void (*finaliser)(struct object *)) {
     struct dict *methods = new_dict();
@@ -32,11 +16,13 @@ struct class *create_class(struct class *superclass, void (*initialiser)(struct 
     assert(new_class != NULL);
     new_class->superclass = superclass;
     new_class->initialiser = initialiser;
+    new_class->finaliser = finaliser;
     new_class->methods = methods;
     return new_class;
 }
 
 struct object *create_from(struct class *class) {
+    assert(class != NULL);
     struct object *new_object;
     if (class->superclass != NULL) {
         new_object = create_from(class->superclass);
@@ -73,7 +59,6 @@ void register_method(struct class *class, int methodkey, void *(*function)(struc
 void call (struct object *object, int methodkey, ... ) {
     va_list args;
     va_start(args,methodkey);
-    printf("key %i\n", methodkey);
     struct method *method = NULL;
     struct class *class = object->class;
     while (1) {
@@ -85,7 +70,15 @@ void call (struct object *object, int methodkey, ... ) {
     method->function(object, args);
 }
 
-// TESTING AREA:
+void *attr(struct object *object, int attrkey) {
+    return dict_get(object->data,attrkey);
+}
+
+void set(struct object *object, int attrkey, void *value) {
+    dict_set(object->data,attrkey,value);
+}
+
+/*/ TESTING AREA:
 
 enum {TEST = 0
 };
@@ -95,6 +88,7 @@ void *test1(struct object *object, va_list args) {
     return NULL;
 }
 
+/
 int main () {
     struct class *myclass = create_class(NULL,NULL,NULL);
     register_method(myclass,TEST,test1);
@@ -103,3 +97,4 @@ int main () {
     delete_object(myobject);
     return 0;
 }
+*/

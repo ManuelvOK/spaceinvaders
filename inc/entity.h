@@ -1,11 +1,9 @@
-struct entity {
-    char symbol;
-    int x;
-    int y;
-    void (*update)(struct entity *);
-};
+enum {SYMBOL,
+      X,Y,
+      UPDATE,
+      MOVE,
+      GOTO};
 
-struct entity *create_entity();
-void delete_entity(struct entity *entity);
-void update(struct entity *entity);
-void move(struct entity *entity, int direction);
+extern struct class *entity_class;
+
+void init_entity_class();

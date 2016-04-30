@@ -8,7 +8,7 @@
 
 WINDOW *menu_win;
 
-void display_init() {
+void init_display() {
     initscr();
     noecho();
     cbreak();   /* Line buffering disabled. pass on everything */
@@ -17,7 +17,7 @@ void display_init() {
     keypad(menu_win, TRUE);
     wtimeout(menu_win,0);
 }
-void display_tidy() {
+void tidy_display() {
     endwin();
 }
 

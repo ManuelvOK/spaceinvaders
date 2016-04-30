@@ -45,6 +45,20 @@ void *dict_get(struct dict *dict, int key) {
     return NULL;
 }
 
+void dict_set(struct dict *dict, int key, void *value) {
+    struct item *item = dict->first;
+    while (item != NULL) {
+        if (item->key == key) {
+            item->value = value;
+            return;
+        }
+        item = item->next;
+    }
+    printf("bloh %i   ",key);
+    dict_add(dict,key,value);
+}
+
+
 /*
 int main () {
     int x,y;

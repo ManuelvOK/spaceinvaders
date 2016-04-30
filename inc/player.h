@@ -1,4 +1,3 @@
-struct entity;
+extern struct class *player_class;
 
-void playerupdate(struct entity *player);
-struct entity *create_player();
+void init_player_class();
