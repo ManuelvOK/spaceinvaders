@@ -12,7 +12,7 @@ OBJ		=$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 INC		=-I./$(INCDIR)/
 
 CFLAGS	=-std=c99 ${INC} -Wall -Wextra -Wpedantic -Werror
-LDFLAGS	=-lncurses
+LDFLAGS	=-lncurses -fsanitize=address
 
 VPATH 	=$(SRCDIR)
 
@@ -20,7 +20,7 @@ VPATH 	=$(SRCDIR)
 
 all: $(OBJ) $(EXE)
 
-debug: CFLAGS += -g
+debug: CFLAGS += -g -fsanitize=address
 debug: $(EXE)
 
 $(OBJ): | $(OBJDIR)
