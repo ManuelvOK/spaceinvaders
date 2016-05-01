@@ -54,7 +54,6 @@ void dict_set(struct dict *dict, int key, void *value) {
         }
         item = item->next;
     }
-    printf("bloh %i   ",key);
     dict_add(dict,key,value);
 }
 

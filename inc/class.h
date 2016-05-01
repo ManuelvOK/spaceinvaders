@@ -30,7 +30,7 @@ void delete_object(struct object *object);
 
 void register_method(struct class *class, int methodkey, void *(*function)(struct object *, va_list) );
 
-void call (struct object *object, int methodkey, ... );
+void *call (struct object *object, int methodkey, ... );
 
 void *attr(struct object *object, int attrkey);
 

@@ -56,7 +56,7 @@ void register_method(struct class *class, int methodkey, void *(*function)(struc
     dict_add(class->methods,methodkey,new_method);    
 }
 
-void call (struct object *object, int methodkey, ... ) {
+void *call (struct object *object, int methodkey, ... ) {
     va_list args;
     va_start(args,methodkey);
     struct method *method = NULL;
@@ -67,7 +67,7 @@ void call (struct object *object, int methodkey, ... ) {
         if (method != NULL) break;
         class = class->superclass;
     }
-    method->function(object, args);
+    return method->function(object, args);
 }
 
 void *attr(struct object *object, int attrkey) {

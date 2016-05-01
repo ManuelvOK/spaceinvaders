@@ -1,6 +1,7 @@
 #include <time.h>
 #include <assert.h>
 
+#include <globals.h>
 #include <io.h>
 #include <player.h>
 #include <entity.h>
@@ -23,14 +24,13 @@ void delay(double dly){
 
 int main(void) {
     init_display();
-    init_entity_class();
     init_player_class();
     
     struct object *player = create_from(player_class);
-    
+        
     while (1) {
-        call(player,UPDATE);
-        call(player,MOVE,get_direction());
+        update_entities();
+        call(player,CONTROL,get_input());
         draw_board();
         delay(0.02);
     }
