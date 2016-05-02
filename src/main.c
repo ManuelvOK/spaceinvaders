@@ -28,9 +28,11 @@ int main(void) {
     
     struct object *player = create_from(player_class);
         
-    while (1) {
+    int control = STAY;
+    while (!(control & QUIT)) {
         update_entities();
-        call(player,CONTROL,get_input());
+        control = get_input();
+        call(player,CONTROL,control);
         draw_board();
         delay(0.02);
     }

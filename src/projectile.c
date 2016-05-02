@@ -15,7 +15,7 @@ void *projectileupdate(struct object *projectile,va_list args) {
     return NULL;
 }
 
-char projectilesymbol = '.';
+char projectilesymbol = '|';
 
 void init_projectile(struct object *projectile) {
     set(projectile,SYMBOL,&projectilesymbol);

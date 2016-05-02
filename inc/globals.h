@@ -10,10 +10,12 @@ enum {
     DOWN = 4,
     RIGHT = 8,
     FIRE = 16,
+    QUIT = 32,
     
     // Entity methods/attributes
     SYMBOL,
     X,Y,
+    DX,DY,
     HEADING,
     UPDATE,         // ()
     MOVE,           // (direction)

@@ -16,26 +16,25 @@ void init_display() {
     cbreak();   /* Line buffering disabled. pass on everything */
     curs_set(0);
     
-    menu_win = newwin(HEIGHT, WIDTH, 0, 0);
-    keypad(menu_win, TRUE);
-    wtimeout(menu_win,0);
+    keypad(stdscr, TRUE);
+    timeout(0);
 }
 void tidy_display() {
     endwin();
 }
 
 void draw_board(void){
-    wrefresh(menu_win);
+    refresh();
 }
 
 void set_char_at(int x, int y, char c) {
-    mvwprintw(menu_win,y,x,"%c",c);
+    mvprintw(y,x,"%c",c);
 }
 
 int get_input() {
     int c;
-    c = wgetch(menu_win);
-    while (wgetch(menu_win) != -1);
+    c = getch();
+    while (getch() != -1); // restliche Eingaben verwerfen
 
     switch (c) {
         case KEY_UP:   return UP;
@@ -43,6 +42,7 @@ int get_input() {
         case KEY_RIGHT:return RIGHT;
         case KEY_LEFT: return LEFT;
         case ' ':      return FIRE;
+        case 27:       return QUIT;
         default:       return STAY;
     }
 }
