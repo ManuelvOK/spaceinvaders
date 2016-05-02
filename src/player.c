@@ -51,6 +51,10 @@ static void *playercontrol(struct object *player,va_list args) {
     *dx -= a * !!(direction & LEFT);
     *dy += a * !!(direction & DOWN);
     *dy -= a * !!(direction & UP);
+    if (*dx > 1) *dx = 1;
+    if (*dx <-1) *dx =-1;
+    if (*dy > 1) *dy = 1;
+    if (*dy <-1) *dy =-1;
     
     if (direction & FIRE) {
         call(player,FIRE);
