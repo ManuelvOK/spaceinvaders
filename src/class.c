@@ -46,6 +46,7 @@ void delete_object(struct object *object) {
         }
         class = class->superclass;
     }
+    //dict_free(object->data)  // yet to be implemented
     free(object);
 }
 

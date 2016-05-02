@@ -38,9 +38,7 @@ int inside_screen(int x,int y) {
     return ((0 <= x) && (x < WIDTH) && (0 <= y) && (y < HEIGHT));
 }
 
-
-
-void destroy_entity(struct object *entity) {
+void deinit_entity(struct object *entity) {
     int x = round( *(float *) attr(entity,X) );
     int y = round( *(float *) attr(entity,Y) );
     if (inside_screen(x,y)) {
@@ -96,10 +94,10 @@ void *move(struct object *entity, va_list args) {
     float new_y = *y;
     int dx = 0;
     int dy = 0;
-    dx += 0 != (direction & RIGHT);
-    dx -= 0 != (direction & LEFT);
-    dy += 0 != (direction & DOWN);
-    dy -= 0 != (direction & UP);
+    dx += !!(direction & RIGHT);
+    dx -= !!(direction & LEFT);
+    dy += !!(direction & DOWN);
+    dy -= !!(direction & UP);
     new_x+=dx;
     new_y+=dy;
     call(entity,GOTO,new_x,new_y);
@@ -124,7 +122,7 @@ void update_entities() {
 
 void init_entity_class() {
     if (entity_class == NULL) {
-        entity_class = create_class(NULL,init_entity,destroy_entity);
+        entity_class = create_class(NULL,init_entity,deinit_entity);
         register_method(entity_class,MOVE,move);
         register_method(entity_class,GOTO,entity_goto);
         register_method(entity_class,ON_COLLIDE,dummi);

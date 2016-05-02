@@ -9,19 +9,19 @@
 
 struct class *projectile_class = NULL;
 
-void *projectileupdate(struct object *projectile,va_list args) {
+char projectilesymbol = '|';
+
+static void init_projectile(struct object *projectile) {
+    set(projectile,SYMBOL,&projectilesymbol);
+}
+
+static void *projectileupdate(struct object *projectile,va_list args) {
     (void)args;
     call(projectile,MOVE,UP);
     return NULL;
 }
 
-char projectilesymbol = '|';
-
-void init_projectile(struct object *projectile) {
-    set(projectile,SYMBOL,&projectilesymbol);
-}
-
-void *on_collide(struct object *projectile, va_list args) {
+static void *on_collide(struct object *projectile, va_list args) {
     struct object *other = (void *) va_arg(args,void *);
     if (other == NULL) {
         delete_object(projectile);
@@ -29,7 +29,7 @@ void *on_collide(struct object *projectile, va_list args) {
     return NULL;
 }
 
-void *fire(struct object *entity, va_list args) {
+static void *fire(struct object *entity, va_list args) {
     (void)args;
     float *x = attr(entity,X);
     float *y = attr(entity,Y);
