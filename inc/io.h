@@ -1,9 +1,10 @@
 #ifndef IO_H
 #define IO_H
 
-#include "datastructures.h"
+#include "entity.h"
+#include "space.h"
 
 void drawEntity(struct entity *entity);
-void drawBoard(void);
+void drawSpace(struct space *space);
 
 #endif
