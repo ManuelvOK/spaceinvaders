@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
-#include "../inc/space.h"
 #include "../inc/globals.h"
+#include "../inc/space.h"
 
 struct space *globalSpace = NULL;
 

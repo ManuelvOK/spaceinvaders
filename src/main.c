@@ -1,8 +1,8 @@
 #include <ncurses.h>
 #include "../inc/entity.h"
 #include "../inc/io.h"
-#include "../inc/space.h"
 #include "../inc/globals.h"
+#include "../inc/space.h"
 
 int main()
 {

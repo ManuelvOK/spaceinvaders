@@ -4,3 +4,5 @@ spaceinvaders
 
 # funny Clang dependency files
 *.d-e
+# vim swap files
+*.swp
