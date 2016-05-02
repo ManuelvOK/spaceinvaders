@@ -12,7 +12,7 @@ OBJ		=$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 INC		=-I./$(INCDIR)/
 
 CFLAGS	=-std=c99 ${INC} -Wall -Wextra -Wpedantic -Werror
-LDFLAGS	=-lncurses -fsanitize=address
+LDFLAGS	=-lncurses -lm -fsanitize=address
 
 VPATH 	=$(SRCDIR)
 

@@ -33,16 +33,16 @@ void set_char_at(int x, int y, char c) {
 
 int get_input() {
     int c;
-    c = getch();
-    while (getch() != -1); // restliche Eingaben verwerfen
-
-    switch (c) {
-        case KEY_UP:   return UP;
-        case KEY_DOWN: return DOWN;
-        case KEY_RIGHT:return RIGHT;
-        case KEY_LEFT: return LEFT;
-        case ' ':      return FIRE;
-        case 27:       return QUIT;
-        default:       return STAY;
+    int control = STAY;
+    while ((c = getch()) != -1) {
+        switch (c) {
+            case KEY_UP:   control |= UP   ; break;
+            case KEY_DOWN: control |= DOWN ; break;
+            case KEY_RIGHT:control |= RIGHT; break;
+            case KEY_LEFT: control |= LEFT ; break;
+            case ' ':      control |= FIRE ; break;
+            case 27:       control |= QUIT ; break;
+        }
     }
+    return control;
 }

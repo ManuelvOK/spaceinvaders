@@ -31,7 +31,7 @@ void init_player(struct object *player) {
     set(player,SYMBOL,&playersymbol);
     int *h = attr(player,HEADING);
     *h = UP;
-    call(player,GOTO,WIDTH/2,HEIGHT/2);
+    call(player,GOTO,(float) WIDTH/2, (float) HEIGHT/2);
 }
 
 void init_player_class() {

@@ -31,8 +31,8 @@ void *on_collide(struct object *projectile, va_list args) {
 
 void *fire(struct object *entity, va_list args) {
     (void)args;
-    int *x = attr(entity,X);
-    int *y = attr(entity,Y);
+    float *x = attr(entity,X);
+    float *y = attr(entity,Y);
     int *heading = attr(entity,HEADING);
     int dx = 0;
     int dy = 0;

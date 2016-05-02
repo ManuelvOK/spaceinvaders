@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <assert.h>
 #include <stdio.h>
+#include <math.h>
 
 #include <entity.h>
 #include <globals.h>
@@ -18,8 +19,8 @@ struct list entity_list = {NULL};
 void init_entity(struct object *entity) {
     list_add(&entity_list,entity);
     // TODO: insert into list too
-    int *x = malloc(sizeof x);
-    int *y = malloc(sizeof y);
+    float *x = malloc(sizeof x);
+    float *y = malloc(sizeof y);
     int *h = malloc(sizeof h);
     assert(x != NULL);
     assert(y != NULL);
@@ -37,12 +38,14 @@ int inside_screen(int x,int y) {
     return ((0 <= x) && (x < WIDTH) && (0 <= y) && (y < HEIGHT));
 }
 
+
+
 void destroy_entity(struct object *entity) {
-    int *x = attr(entity,X);
-    int *y = attr(entity,Y);
-    if (inside_screen(*x,*y)) {
-        set_char_at(*x,*y,' ');
-        entity_array[*x][*y] = NULL;
+    int x = round( *(float *) attr(entity,X) );
+    int y = round( *(float *) attr(entity,Y) );
+    if (inside_screen(x,y)) {
+        set_char_at(x,y,' ');
+        entity_array[x][y] = NULL;
     }
     list_remove(&entity_list,entity);
     free(attr(entity,X));
@@ -51,41 +54,46 @@ void destroy_entity(struct object *entity) {
 }
 
 void *entity_goto(struct object *entity, va_list args) {
-    int new_x = (int) va_arg(args,int);
-    int new_y = (int) va_arg(args,int);
+    // please make sure real float is passed and not integer;
+    float new_x = (float) va_arg(args,double);
+    float new_y = (float) va_arg(args,double);
     char *symbol = attr(entity,SYMBOL);
-    int *x = attr(entity,X);
-    int *y = attr(entity,Y);
+    float *x = attr(entity,X);
+    float *y = attr(entity,Y);
+    // gerundete Versionen der Werte
+    int rx = round(*x);
+    int ry = round(*y);
+    int rnx = round(new_x);
+    int rny = round(new_y);
     // auf Kollisionen prüfen;
-    if ((new_x == *x) && (new_y == *y)) return NULL; // do nothing when not changing position
-    if (!inside_screen(new_x,new_y)) {
+    if (!inside_screen(rnx,rny)) {
         call(entity,ON_COLLIDE,NULL,new_x,new_y); //NULL for colliding with wall
     }
-    else if (entity_array[new_x][new_y] != NULL) {
-        call(entity,ON_COLLIDE,entity_array[new_x][new_y],new_x,new_y);
+    else if ((entity_array[rnx][rny] != NULL) && (entity_array[rnx][rny] != entity)) {
+        call(entity,ON_COLLIDE,entity_array[rnx][rny],new_x,new_y);
     }
     else {
         // von alter Position löschen
-        if (inside_screen(*x,*y)) {
-            set_char_at(*x,*y,' ');
-            entity_array[*x][*y] = NULL;
+        if (inside_screen(rx,ry)) {
+            set_char_at(rx,ry,' ');
+            entity_array[rx][ry] = NULL;
         }
         // Position ändern
         *x = new_x;
         *y = new_y;
         // an neuer Position eintragen
-        set_char_at(*x,*y,*symbol);
-        entity_array[*x][*y] = entity;
+        set_char_at(rnx,rny,*symbol);
+        entity_array[rnx][rny] = entity;
     }
     return NULL;
 }
 
 void *move(struct object *entity, va_list args) {
     int direction = (int) va_arg(args,int);
-    int *x = attr(entity,X);
-    int *y = attr(entity,Y);
-    int new_x = *x;
-    int new_y = *y;
+    float *x = attr(entity,X);
+    float *y = attr(entity,Y);
+    float new_x = *x;
+    float new_y = *y;
     int dx = 0;
     int dy = 0;
     dx += 0 != (direction & RIGHT);
