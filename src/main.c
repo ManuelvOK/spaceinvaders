@@ -11,7 +11,15 @@
 
 int main(void)
 {
+
     struct field fld = fldCreate(WIDTH, HEIGHT);
+
+    // test
+    struct entity e;
+    entSetSymbol(&e, 'A');
+    printf("%c\n", entGetSymbol(e));
+    entSetSymbol(&e, 'a');
+    printf("%c\n", entGetSymbol(e));
 
     fldFree(&fld);
 

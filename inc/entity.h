@@ -3,10 +3,14 @@
 
 struct entity
 {
-    char symbol;
-    char health;
+    unsigned char symbol : 6; // ascii - 32
+    unsigned char health : 2;
 };
 
-struct entity entGetEmpty();
+struct entity entCreateEmpty();
+
+inline char entGetSymbol(struct entity ent);
+inline void entSetSymbol(struct entity *this, char symbol);
+
 
 #endif // SPACEINVADERS_ENTITY_H

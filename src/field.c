@@ -23,8 +23,8 @@ void fldFree(struct field *this)
 
 struct entity fldGet(struct field *this, unsigned x, unsigned y)
 {
-    if (x >= this->width)  return entGetEmpty();
-    if (y >= this->height) return entGetEmpty();
+    if (x >= this->width)  return entCreateEmpty();
+    if (y >= this->height) return entCreateEmpty();
 
     return this->data[y * this->width + x];
 }
