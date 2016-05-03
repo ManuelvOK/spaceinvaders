@@ -14,7 +14,25 @@ struct field fldCreate(unsigned width, unsigned height)
     return fld;
 }
 
-void fldFree(struct field fld)
+void fldFree(struct field *this)
 {
-    free(fld.data);
+    free(this->data);
+}
+
+
+
+struct entity fldGet(struct field *this, unsigned x, unsigned y)
+{
+    if (x >= this->width)  return entGetEmpty();
+    if (y >= this->height) return entGetEmpty();
+
+    return this->data[y * this->width + x];
+}
+
+void fldSet(struct field *this, struct entity value, unsigned x, unsigned y)
+{
+    if (x >= this->width)  return;
+    if (y >= this->height) return;
+
+    this->data[y * this->width + x] = value;
 }

@@ -13,5 +13,7 @@ int main(void)
 {
     struct field fld = fldCreate(WIDTH, HEIGHT);
 
+    fldFree(&fld);
+
     return 0;
 }
