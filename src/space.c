@@ -1,18 +1,19 @@
-#include <stdbool.h>
 #include <stdlib.h>
+#include "../inc/io.h"
 #include "../inc/globals.h"
 #include "../inc/space.h"
 
 struct space *globalSpace = NULL;
 
-struct space *newSpace(int width, int height)
+// Returns a pointer to a new space on the heap.
+struct space *newSpace(unsigned width, unsigned height)
 {
     struct space *newSpace = malloc(sizeof *newSpace);
-    void **array = calloc(width * height, sizeof(void *));
+    struct entity **array = calloc(width * height, sizeof(struct entity *));
 
-    for (int i = 0; i > width * height; i++)
+    if (newSpace == NULL || array == NULL)
     {
-        array[i] = NULL;
+        terminate();
     }
 
     newSpace->array = array;
@@ -22,37 +23,56 @@ struct space *newSpace(int width, int height)
     return newSpace;
 }
 
-bool spaceOutOfBounds(struct space *space, int x, int y)
-{
-    return (space == NULL || x >= space->width || y >= space->height);
-}
-
-void setSpaceElement(struct space *space, int x, int y, void *content)
-{
-    if (spaceOutOfBounds(space, x, y))
-    {
-        exit(EXIT_FAILURE);
-    }
-
-    space->array[y * space->width + x] = content;
-}
-
-void *getSpaceElement(struct space *space, int x, int y)
-{
-    if (spaceOutOfBounds(space, x, y))
-    {
-        exit(EXIT_FAILURE);
-    }
-
-    return space->array[y * space->width + x];
-}
-
+// Initialises the global space variable.
 void setupSpace()
 {
     globalSpace = newSpace(WIDTH, HEIGHT);
 }
 
+// Returns the global space variable.
 struct space *getSpace()
 {
     return globalSpace;
+}
+
+// Returns true if a space can be accessed at specific coordinates.
+bool spaceOutOfBounds(struct space *space, unsigned x, unsigned y)
+{
+    return (space == NULL || x >= space->width || y >= space->height);
+}
+
+// Destructively sets the element of a space to a given pointer.
+void setSpaceElement(struct space *space, unsigned x, unsigned y, struct entity *content)
+{
+    if (spaceOutOfBounds(space, x, y))
+    {
+        terminate();
+    }
+
+    space->array[y * space->width + x] = content;
+}
+
+// Returns the content of a space at specific coordinates.
+struct entity *getSpaceElement(struct space *space, unsigned x, unsigned y)
+{
+    if (spaceOutOfBounds(space, x, y))
+    {
+        terminate();
+    }
+
+    return space->array[y * space->width + x];
+}
+
+// Non-destructive wrapper for adding an entity to the space.
+void addEntity(struct space *space, struct entity *entity)
+{
+    if (entity == NULL || space == NULL)
+    {
+        terminate();
+    }
+
+    if (getSpaceElement(space, entity->x, entity->y) == NULL)
+    {
+        setSpaceElement(space, entity->x, entity->y, entity);
+    }
 }

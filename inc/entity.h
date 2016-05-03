@@ -1,19 +1,15 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-struct coord
-{
-    int x;
-    int y;
-};
-
 struct entity
 {
-    struct coord pos;
-    int health;
+    unsigned x;
+    unsigned y;
+    unsigned health;
     int symbol;
 };
 
-struct entity * newEntity(int xPos, int yPos, int health, int symbol);
+struct entity * newEntity(unsigned x, unsigned y, unsigned health, int symbol);
+void moveEntity(struct entity *entity, int deltaX, int deltaY);
 
 #endif

@@ -4,7 +4,7 @@
 #include "entity.h"
 #include "space.h"
 
-void drawEntity(struct entity *entity);
+void terminate();
 void drawSpace(struct space *space);
 
 #endif

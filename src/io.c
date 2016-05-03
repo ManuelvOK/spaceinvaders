@@ -3,11 +3,14 @@
 #include <stdlib.h>
 #include "../inc/io.h"
 
-void drawEntity(struct entity *entity)
+// Ends ncurses and makes the program terminate
+void terminate()
 {
-    mvprintw(entity->pos.y, entity->pos.x, "%c", entity->symbol);
+    endwin();
+    exit(EXIT_FAILURE);
 }
 
+// Prints the contents of the space on the screen.
 void drawSpace(struct space *space)
 {
     if (space == NULL)
@@ -15,11 +18,21 @@ void drawSpace(struct space *space)
         exit(EXIT_FAILURE);
     }
 
-    for (int y = 0; y < space->height; y++)
+    struct entity *currentPtr;
+
+    for (unsigned y = 0; y < space->height; y++)
     {
-        for (int x = 0; x < space->width; x++)
+        for (unsigned x = 0; x < space->width; x++)
         {
-            mvprintw(y, x * 2, "%1d_", getSpaceElement(space, x, y) == NULL);
+            currentPtr = getSpaceElement(space, x, y);
+            if (currentPtr == NULL)
+            {
+                mvprintw(y, x*2, "_|");
+            }
+            else
+            {
+                mvprintw(y, x*2, "%c|", currentPtr->symbol);
+            }
         }
     }
 }

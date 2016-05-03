@@ -1,37 +1,45 @@
 #include <stdlib.h>
 #include "../inc/entity.h"
+#include "../inc/io.h"
 #include "../inc/space.h"
 
-struct entity *newEntity(int xPos, int yPos, int health, int symbol)
+// Returns a pointer to a new entity on the heap.
+struct entity *newEntity(unsigned x, unsigned y, unsigned health, int symbol)
 {
     struct entity *newEntity = malloc(sizeof(struct entity));
+    
     if (newEntity == NULL)
     {
-        exit(EXIT_FAILURE);
+        terminate();
     }
 
-    struct coord pos = { xPos, yPos };
-
-    newEntity->pos = pos;
+    newEntity->x = x;
+    newEntity->y = y;
     newEntity->health = health;
     newEntity->symbol = symbol;
 
     return newEntity;
 }
 
-void move(struct entity *entity, int deltaX, int deltaY)
+// Moves an entity from one position on the global space to another.
+void moveEntity(struct entity *entity, int deltaX, int deltaY)
 {
     if (entity == NULL)
     {
-        exit(EXIT_FAILURE);
+        terminate();
     }
 
-    int x = entity->pos.x;
-    int y = entity->pos.y;
+    unsigned newX = entity->x + deltaX;
+    unsigned newY = entity->y + deltaY;
 
-    if (getSpaceElement(getSpace(), x + deltaX, y + deltaY) == NULL)
+    if (!spaceOutOfBounds(getSpace(), newX, newY))
     {
-        setSpaceElement(getSpace(), x, y, NULL);
-        setSpaceElement(getSpace(), x + deltaX, y + deltaY, entity);
+        if (getSpaceElement(getSpace(), newX, newY) == NULL)
+        {
+            setSpaceElement(getSpace(), entity->x, entity->y, NULL);
+            setSpaceElement(getSpace(), newX, newY, entity);
+            entity->x = newX;
+            entity->y = newY;
+        }
     }
 }
