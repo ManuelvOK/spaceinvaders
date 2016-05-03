@@ -1,3 +1,6 @@
+.*
+!.gitignore
 build/*
 *.d
 spaceinvaders
+CMakeLists.txt

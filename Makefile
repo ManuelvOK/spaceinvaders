@@ -1,20 +1,20 @@
-CC		=gcc
+CC      =gcc
 
-SRCDIR 	=src
-OBJDIR	=build
-INCDIR	=inc
+SRCDIR  =src
+OBJDIR  =build
+INCDIR  =inc
 
-EXE		=spaceinvaders
+EXE     =spaceinvaders
 
-SRC 	=$(wildcard src/*.c)
-DEP		=$(SRC:%.c=%.d)
-OBJ		=$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-INC		=-I./$(INCDIR)/
+SRC     =$(wildcard src/*.c)
+DEP     =$(SRC:%.c=%.d)
+OBJ     =$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+INC     =-I./$(INCDIR)/
 
-CFLAGS	=-std=c99 ${INC} -Wall -Wextra -Wpedantic -Werror
-LDFLAGS	=-lncurses
+CFLAG   =-std=c99 ${INC} -Wall -Wextra -Wpedantic -Werror
+LDFLAGS =-lncurses
 
-VPATH 	=$(SRCDIR)
+VPATH   =$(SRCDIR)
 
 .PHONY: all clean debug
 
