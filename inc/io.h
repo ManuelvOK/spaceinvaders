@@ -3,4 +3,4 @@
 
 void draw_board(void);
 
-#endif /* IO_H */
+#endif // IO_H
