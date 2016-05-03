@@ -7,6 +7,4 @@ struct entity
     char health;
 };
 
-struct entity entGetEmpty();
-
 #endif // SPACEINVADERS_ENTITY_H
