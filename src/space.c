@@ -6,17 +6,26 @@
 struct space *globalSpace = NULL;
 
 // Returns a pointer to a new space on the heap.
-struct space *newSpace(unsigned width, unsigned height)
+struct space *newSpace(unsigned char width, unsigned char height, struct pos playerPos)
 {
+    unsigned size = width * height;
     struct space *newSpace = malloc(sizeof *newSpace);
-    struct entity **array = calloc(width * height, sizeof(struct entity *));
+    struct entity *array = calloc(size, sizeof(struct entity));
 
     if (newSpace == NULL || array == NULL)
     {
         terminate();
     }
 
+    struct entity deadEntity = newEntity(INVADER, '.', 0);
+    
+    for (unsigned i = 0; i < size; i++)
+    {
+        array[i] = deadEntity;
+    }
+
     newSpace->array = array;
+    newSpace->playerPos = playerPos;
     newSpace->width = width;
     newSpace->height = height;
 
@@ -26,7 +35,8 @@ struct space *newSpace(unsigned width, unsigned height)
 // Initialises the global space variable.
 void setupSpace()
 {
-    globalSpace = newSpace(WIDTH, HEIGHT);
+    struct pos playerPos = { (unsigned char)(WIDTH / 2), HEIGHT -1 };   // Could be generalised
+    globalSpace = newSpace(WIDTH, HEIGHT, playerPos);
 }
 
 // Returns the global space variable.
@@ -35,44 +45,82 @@ struct space *getSpace()
     return globalSpace;
 }
 
-// Returns true if a space can be accessed at specific coordinates.
-bool spaceOutOfBounds(struct space *space, unsigned x, unsigned y)
+// Sets the player position of a space.
+void setPlayer(struct space *space, struct pos coords)
 {
-    return (space == NULL || x >= space->width || y >= space->height);
-}
-
-// Destructively sets the element of a space to a given pointer.
-void setSpaceElement(struct space *space, unsigned x, unsigned y, struct entity *content)
-{
-    if (spaceOutOfBounds(space, x, y))
+    if (spaceOutOfBounds(space, coords))
     {
         terminate();
     }
 
-    space->array[y * space->width + x] = content;
+    space->playerPos = coords;
+}
+
+// Returns the position of the player of a space.
+struct pos getPlayer(struct space *space)
+{
+    if (space == NULL)
+    {
+        terminate();
+    }
+
+    return space->playerPos;
+}
+
+// Returns true if a space can be accessed at specific coordinates.
+bool spaceOutOfBounds(struct space *space, struct pos coords)
+{
+    return (space == NULL || coords.x < 0 || coords.x >= space->width ||
+        coords.y < 0 || coords.y >= space->height);
+}
+
+// Destructively sets the element of a space to a given entity.
+void setEntity(struct space *space, struct pos coords, struct entity content)
+{
+    if (spaceOutOfBounds(space, coords))
+    {
+        terminate();
+    }
+
+    space->array[coords.y * space->width + coords.x] = content;
 }
 
 // Returns the content of a space at specific coordinates.
-struct entity *getSpaceElement(struct space *space, unsigned x, unsigned y)
+struct entity getEntity(struct space *space, struct pos coords)
 {
-    if (spaceOutOfBounds(space, x, y))
+    if (spaceOutOfBounds(space, coords))
     {
         terminate();
     }
 
-    return space->array[y * space->width + x];
+    return space->array[coords.y * space->width + coords.x];
 }
 
-// Non-destructive wrapper for adding an entity to the space.
-void addEntity(struct space *space, struct entity *entity)
+// Non-destructive wrapper for adding an entity to the global space.
+void addEntity(unsigned char x, unsigned char y, struct entity entity)
 {
-    if (entity == NULL || space == NULL)
-    {
-        terminate();
-    }
+    struct pos insertPos = { x, y };
 
-    if (getSpaceElement(space, entity->x, entity->y) == NULL)
+    if (getEntity(globalSpace, insertPos).health == 0)
     {
-        setSpaceElement(space, entity->x, entity->y, entity);
+        setEntity(globalSpace, insertPos, entity);
+    }
+}
+
+// Moves an entity of the global space relatively to its current coordinates.
+void moveEntity(struct pos current, struct pos change)
+{   
+    struct pos newPos = { current.x + change.x, current.y + change.y };
+    
+    if (!spaceOutOfBounds(globalSpace, newPos))
+    { 
+        struct entity atCurrent = getEntity(globalSpace, current);
+        struct entity atNew = getEntity(globalSpace, newPos);
+
+        if (atNew.health == 0)
+        {
+            setEntity(globalSpace, newPos, atCurrent);
+            setEntity(globalSpace, current, atNew);
+        }
     }
 }

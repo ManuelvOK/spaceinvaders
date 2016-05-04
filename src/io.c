@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "../inc/entity.h"
 #include "../inc/io.h"
 #include "../inc/globals.h"
 
@@ -38,20 +39,23 @@ void drawSpace(struct space *space)
         exit(EXIT_FAILURE);
     }
 
-    struct entity *currentPtr;
+    struct pos currentPos;
 
     for (unsigned y = 0; y < space->height; y++)
     {
+        currentPos.y = y;
+
         for (unsigned x = 0; x < space->width; x++)
         {
-            currentPtr = getSpaceElement(space, x, y);
-            if (currentPtr == NULL)
+            currentPos.x = x;
+
+            if (getEntity(getSpace(), currentPos).health == 0)
             {
                 mvprintw(y, x*2, "_|");
             }
             else
             {
-                mvprintw(y, x*2, "%c|", currentPtr->symbol);
+                mvprintw(y, x*2, "%c|", getEntity(getSpace(), currentPos).symbol);
             }
         }
     }
@@ -68,19 +72,19 @@ bool handleInput()
     }
     else if (ch == KEY_MOVE_UP)
     {
-        moveEntity(getPlayer(), 0, -1);
+        moveEntity(getPlayer(), getPos(0, -1));
     }
     else if (ch == KEY_MOVE_DOWN)
     {
-        moveEntity(getPlayer(), 0, 1);
+        moveEntity(getPlayer(), getPos(0, 1));
     }
     else if (ch == KEY_MOVE_LEFT)
     {
-        moveEntity(getPlayer(), -1, 0);
+        moveEntity(getPlayer(), getPos(-1, 0));
     }
     else if (ch == KEY_MOVE_RIGHT)
     {
-        moveEntity(getPlayer(), 1, 0);
+        moveEntity(getPlayer(), getPos(1, 0));
     }
 
     return true;

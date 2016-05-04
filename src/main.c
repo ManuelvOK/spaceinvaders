@@ -10,12 +10,11 @@ int main()
 {
     startVisuals();
     setupSpace();
-    setupPlayer();
 
-    struct entity *invader1 = newEntity(1, 1, 1, '#');
-    struct entity *invader2 = newEntity(5, 2, 1, '~');
-    addEntity(getSpace(), invader1);
-    addEntity(getSpace(), invader2);
+    struct entity invader1 = newEntity(INVADER, '#', 1);
+    struct entity invader2 = newEntity(INVADER, '~', 1);
+    addEntity(1, 1,  invader1);
+    addEntity(5, 2, invader2);
 
     while (true)
     {

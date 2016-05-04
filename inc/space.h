@@ -6,18 +6,21 @@
 
 struct space
 {
-    struct entity **array;
-    unsigned width;
-    unsigned height;
+    struct entity *array;
+    struct pos playerPos;
+    unsigned char width;
+    unsigned char height;
 };
 
-struct space *newSpace(unsigned width, unsigned height);
+struct space *newSpace(unsigned char width, unsigned char height, struct pos playerPos);
 void setupSpace();
 struct space *getSpace();
-bool spaceOutOfBounds(struct space *space, unsigned x, unsigned y);
-void setSpaceElement(struct space *space, unsigned x, unsigned y, struct entity *content);
-struct entity *getSpaceElement(struct space *space, unsigned x, unsigned y);
-void printSpace(struct space *space);
-void addEntity(struct space *space, struct entity *entity);
+void setPlayer(struct space *space, struct pos coords);
+struct pos getPlayer();
+bool spaceOutOfBounds(struct space *space, struct pos coords);
+void setEntity(struct space *space, struct pos coords, struct entity content);
+struct entity getEntity(struct space *space, struct pos coords);
+void addEntity(unsigned char x, unsigned char y, struct entity entity);
+void moveEntity(struct pos current, struct pos change);
 
 #endif
