@@ -5,7 +5,7 @@
 #include "../inc/io.h"
 #include "../inc/globals.h"
 
-// Ends ncurses and makes the program terminate
+// Ends ncurses and makes the program terminate.
 void terminate()
 {
     endwin();
@@ -41,11 +41,11 @@ void drawSpace(struct space *space)
 
     struct pos currentPos;
 
-    for (unsigned y = 0; y < space->height; y++)
+    for (unsigned char y = 0; y < space->height; y++)
     {
         currentPos.y = y;
 
-        for (unsigned x = 0; x < space->width; x++)
+        for (unsigned char x = 0; x < space->width; x++)
         {
             currentPos.x = x;
 
@@ -72,19 +72,19 @@ bool handleInput()
     }
     else if (ch == KEY_MOVE_UP)
     {
-        moveEntity(getPlayer(), getPos(0, -1));
+        movePlayer(getPos(0, -1));
     }
     else if (ch == KEY_MOVE_DOWN)
     {
-        moveEntity(getPlayer(), getPos(0, 1));
+        movePlayer(getPos(0, 1));
     }
     else if (ch == KEY_MOVE_LEFT)
     {
-        moveEntity(getPlayer(), getPos(-1, 0));
+        movePlayer(getPos(-1, 0));
     }
     else if (ch == KEY_MOVE_RIGHT)
     {
-        moveEntity(getPlayer(), getPos(1, 0));
+        movePlayer(getPos(1, 0));
     }
 
     return true;

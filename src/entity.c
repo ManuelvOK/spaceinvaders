@@ -20,8 +20,13 @@ struct entity newEntity(unsigned type, unsigned char symbol, unsigned health)
 }
 
 // Converts two coordinates into a pos struct.
-struct pos getPos(unsigned x, unsigned y)
+struct pos getPos(signed char x, signed char y)
 {
     struct pos coords = { x, y };
     return coords;
+}
+
+bool posEquals(struct pos coords1, struct pos coords2)
+{
+    return (coords1.x == coords2.x && coords1.y == coords2.y);
 }

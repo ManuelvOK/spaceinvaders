@@ -6,6 +6,8 @@
 #define LASER 2
 #define PLAYER 3
 
+#include <stdbool.h>
+
 struct entity
 {
     unsigned type : 2;
@@ -24,5 +26,6 @@ struct pos
 };
 
 struct entity newEntity(unsigned type, unsigned char symbol, unsigned health);
-struct pos getPos(unsigned x, unsigned y);
+struct pos getPos(signed char x, signed char y);
+bool posEquals(struct pos coords1, struct pos coords2);
 #endif

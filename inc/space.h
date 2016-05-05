@@ -12,15 +12,16 @@ struct space
     unsigned char height;
 };
 
-struct space *newSpace(unsigned char width, unsigned char height, struct pos playerPos);
-void setupSpace();
-struct space *getSpace();
-void setPlayer(struct space *space, struct pos coords);
-struct pos getPlayer();
+struct space *newSpace(unsigned char width, unsigned char height);
 bool spaceOutOfBounds(struct space *space, struct pos coords);
+void setPlayer(struct space *space, struct pos coords, struct entity player);
+struct pos getPlayerPos(struct space *space);
 void setEntity(struct space *space, struct pos coords, struct entity content);
 struct entity getEntity(struct space *space, struct pos coords);
-void addEntity(unsigned char x, unsigned char y, struct entity entity);
-void moveEntity(struct pos current, struct pos change);
+void moveEntity(struct space *space, struct pos current, struct pos change);
 
+void setupSpace();
+struct space *getSpace();
+void addEntity(unsigned char x, unsigned char y, struct entity entity);
+void movePlayer(struct pos change);
 #endif
