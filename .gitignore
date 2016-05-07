@@ -1,8 +1,17 @@
-build/*
-*.d
-spaceinvaders
+# Exclude everything
+/*
+# Except makefile
+!/Makefile
+# Except readme
+!/README.md
+# Except gitignore
+!/.gitignore
 
-# funny Clang dependency files
-*.d-e
-# vim swap files
-*.swp
+# Except c files in /src
+!/src
+/src/*
+!/src/*.c
+# Exceot h files in /inc
+!/inc
+/inc/*
+!/inc/*.h
