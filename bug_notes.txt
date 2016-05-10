@@ -1,0 +1,2 @@
+beim Wechseln zwischen "make" und "make debug" ist ein Aufruf von make clean erforderlich
+die Position der Objekte ist ein float... int-pointer führen daher zu merkwürdigen Fehlern

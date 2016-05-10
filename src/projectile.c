@@ -11,11 +11,11 @@ struct class *projectile_class = NULL;
 
 char projectilesymbol = '|';
 
-static void init_projectile(struct object *projectile) {
+static void init(struct object *projectile) {
     set(projectile,SYMBOL,&projectilesymbol);
 }
 
-static void *projectileupdate(struct object *projectile,va_list args) {
+static void *update(struct object *projectile,va_list args) {
     (void)args;
     call(projectile,MOVE,UP);
     return NULL;
@@ -23,9 +23,11 @@ static void *projectileupdate(struct object *projectile,va_list args) {
 
 static void *on_collide(struct object *projectile, va_list args) {
     struct object *other = (void *) va_arg(args,void *);
-    if (other == NULL) {
-        delete_object(projectile);
+    if (other != NULL) {
+        int *health = attr(other,HEALTH);
+        *health -= 1;
     }
+    delete_object(projectile);
     return NULL;
 }
 
@@ -48,8 +50,8 @@ static void *fire(struct object *entity, va_list args) {
 void init_projectile_class() {
     if (projectile_class == NULL) {
         init_entity_class();
-        projectile_class = create_class(entity_class,init_projectile,NULL);
-        register_method(projectile_class,UPDATE,projectileupdate);
+        projectile_class = create_class(entity_class,init,NULL);
+        register_method(projectile_class,UPDATE,update);
         register_method(projectile_class,ON_COLLIDE,on_collide);
         register_method(entity_class,FIRE,fire);
     }

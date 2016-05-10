@@ -16,29 +16,32 @@ struct object *entity_array[WIDTH][HEIGHT];
 
 struct list entity_list = {NULL};
 
-void init_entity(struct object *entity) {
+static void init(struct object *entity) {
     list_add(&entity_list,entity);
-    // TODO: insert into list too
+    // todo: use MACRO here?
     float *x = malloc(sizeof x);
     float *y = malloc(sizeof y);
-    int *h = malloc(sizeof h);
+    int *heading = malloc(sizeof heading);
+    int *health = malloc(sizeof health);
     assert(x != NULL);
     assert(y != NULL);
-    assert(h != NULL);
+    assert(heading != NULL);
+    assert(health != NULL);
+    set(entity,X,x);
+    set(entity,Y,y);
+    set(entity,HEADING,heading);
+    set(entity,HEALTH,health);
     // search for free place on board
     *x = -1;
     *y = -1;
-    *h = STAY;
-    set(entity,X,x);
-    set(entity,Y,y);
-    set(entity,HEADING,h);
+    *heading = STAY;
 }
 
-int inside_screen(int x,int y) {
+static int inside_screen(int x,int y) {
     return ((0 <= x) && (x < WIDTH) && (0 <= y) && (y < HEIGHT));
 }
 
-void deinit_entity(struct object *entity) {
+static void deinit(struct object *entity) {
     int x = round( *(float *) attr(entity,X) );
     int y = round( *(float *) attr(entity,Y) );
     if (inside_screen(x,y)) {
@@ -49,9 +52,10 @@ void deinit_entity(struct object *entity) {
     free(attr(entity,X));
     free(attr(entity,Y));
     free(attr(entity,HEADING));
+    free(attr(entity,HEALTH));
 }
 
-void *entity_goto(struct object *entity, va_list args) {
+static void *entity_goto(struct object *entity, va_list args) {
     // please make sure real float is passed and not integer;
     float new_x = (float) va_arg(args,double);
     float new_y = (float) va_arg(args,double);
@@ -86,7 +90,7 @@ void *entity_goto(struct object *entity, va_list args) {
     return NULL;
 }
 
-void *move(struct object *entity, va_list args) {
+static void *move(struct object *entity, va_list args) {
     int direction = (int) va_arg(args,int);
     float *x = attr(entity,X);
     float *y = attr(entity,Y);
@@ -104,7 +108,7 @@ void *move(struct object *entity, va_list args) {
     return NULL;
 }
 
-void *dummi(struct object *entity, va_list args) {
+static void *dummi(struct object *entity, va_list args) {
     (void)entity;
     (void)args;
     return NULL;
@@ -122,7 +126,7 @@ void update_entities() {
 
 void init_entity_class() {
     if (entity_class == NULL) {
-        entity_class = create_class(NULL,init_entity,deinit_entity);
+        entity_class = create_class(NULL,init,deinit);
         register_method(entity_class,MOVE,move);
         register_method(entity_class,GOTO,entity_goto);
         register_method(entity_class,ON_COLLIDE,dummi);
