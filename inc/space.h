@@ -20,8 +20,4 @@ void setEntity(struct space *space, struct pos coords, struct entity content);
 struct entity getEntity(struct space *space, struct pos coords);
 void moveEntity(struct space *space, struct pos current, struct pos change);
 
-void setupSpace();
-struct space *getSpace();
-void addEntity(unsigned char x, unsigned char y, struct entity entity);
-void movePlayer(struct pos change);
 #endif

@@ -26,6 +26,7 @@ struct pos getPos(signed char x, signed char y)
     return coords;
 }
 
+// Returns true if two struct pos are equal.
 bool posEquals(struct pos coords1, struct pos coords2)
 {
     return (coords1.x == coords2.x && coords1.y == coords2.y);

@@ -3,8 +3,6 @@
 #include "../inc/globals.h"
 #include "../inc/space.h"
 
-struct space *globalSpace = NULL;
-
 // Returns a pointer to a new space on the heap.
 struct space *newSpace(unsigned char width, unsigned char height)
 {
@@ -105,33 +103,4 @@ void moveEntity(struct space *space, struct pos current, struct pos change)
             }
         }
     }
-}
-
-// Wrappers and specific functions
-
-// Initialises the global space variable.
-void setupSpace()
-{
-    globalSpace = newSpace(WIDTH, HEIGHT);
-}
-
-// Returns the global space variable.
-struct space *getSpace()
-{
-    return globalSpace;
-}
-
-// Non-destructive wrapper for adding an entity to the global space.
-void addEntity(unsigned char x, unsigned char y, struct entity entity)
-{
-    if (getEntity(globalSpace, getPos(x, y)).health == 0)
-    {
-        setEntity(globalSpace, getPos(x, y), entity);
-    }
-}
-
-// Wrapper for moving the player of the global space.
-void movePlayer(struct pos change)
-{
-    moveEntity(globalSpace, getPlayerPos(globalSpace), change);
 }

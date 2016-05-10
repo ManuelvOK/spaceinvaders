@@ -1,17 +1,17 @@
 # Exclude everything
 /*
-# Except makefile
+# Exception for makefile
 !/Makefile
-# Except readme
+# Exception for readme
 !/README.md
-# Except gitignore
+# Exception for gitignore
 !/.gitignore
 
-# Except c files in /src
+# Exception for c files in /src
 !/src
 /src/*
 !/src/*.c
-# Exceot h files in /inc
+# Exception for h files in /inc
 !/inc
 /inc/*
 !/inc/*.h
