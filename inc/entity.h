@@ -28,4 +28,5 @@ struct pos
 struct entity newEntity(unsigned type, unsigned char symbol, unsigned health);
 struct pos getPos(signed char x, signed char y);
 bool posEquals(struct pos coords1, struct pos coords2);
+struct entity damageEntity(struct entity entity, unsigned char damage);
 #endif

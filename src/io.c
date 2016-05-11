@@ -22,7 +22,7 @@ void startVisuals()
     noecho();
     timeout(0);
 
-    mvprintw(HEIGHT + 1, 0, "Controls: WASD - move around");
+    mvprintw(HEIGHT + 1, 0, "Controls: A - move left, D - move right, SPACEBAR - shoot");
     mvprintw(HEIGHT + 2, 0, "Press ESC to exit");
     
     refresh();

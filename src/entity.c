@@ -31,3 +31,30 @@ bool posEquals(struct pos coords1, struct pos coords2)
 {
     return (coords1.x == coords2.x && coords1.y == coords2.y);
 }
+
+// Damages an entity and changes the symbols of blocks.
+struct entity damageEntity(struct entity entity, unsigned char damage)
+{
+    if (damage <= entity.health)
+    {
+        entity.health -= damage;
+    }
+    else
+    {
+        entity.health = 0;
+    }
+
+    if (entity.type == BLOCK)
+    {
+        if (entity.health == 2)
+        {
+            entity.symbol = '+';
+        }
+        else if (entity.health == 1)
+        {
+            entity.symbol = '*';
+        }
+    }
+
+    return entity;
+}

@@ -11,11 +11,17 @@ void setupSpace()
     
     struct entity player = newEntity(PLAYER, 'P', 1);
     struct entity invader = newEntity(INVADER, 'Y', 1);
+    struct entity block = newEntity(BLOCK, '#', 3);
     setPlayer(globalSpace, getPos((unsigned char)(WIDTH / 2), HEIGHT - 1), player);
 
     for (unsigned char x = 0; x < globalSpace->width; x++)
     {
         setEntity(globalSpace, getPos(x, 1), invader);
+    }
+
+    for (unsigned char x = 12; x < 17; x++)
+    {
+        setEntity(globalSpace, getPos(x, 3), block);
     }
     // TODO: Add more invaders, blocks
 }
@@ -67,8 +73,7 @@ void updateLasers()
 
                     if (entityAbove.health > 0)
                     {
-                        entityAbove.health--;
-                        setEntity(globalSpace, getPos(x, y - 1), entityAbove);
+                        setEntity(globalSpace, getPos(x, y - 1), damageEntity(entityAbove, 1));
                         setEntity(globalSpace, getPos(x, y), deadEntity);
                     }
                     else
