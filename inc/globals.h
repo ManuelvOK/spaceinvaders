@@ -4,7 +4,7 @@
 // TODO: Replace macros with constants
 #define WIDTH 30
 #define HEIGHT 20
-#define REFRESH_SPEED 100000    // 100ms
+#define REFRESH_SPEED 100       // 100ms
 
 enum
 {

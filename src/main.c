@@ -1,6 +1,5 @@
-#define _BSD_SOURCE
-
 #include <unistd.h>
+#include <ncurses.h>
 #include "../inc/behavior.h"
 #include "../inc/entity.h"
 #include "../inc/io.h"
@@ -11,6 +10,7 @@ int main()
 {
     startVisuals();
     setupSpace();
+    drawSpaceOutline(getSpace());
 
     while (true)
     {
@@ -20,7 +20,7 @@ int main()
         }
 
         drawSpace(getSpace());
-        usleep(REFRESH_SPEED);
+        napms(REFRESH_SPEED);
         updateLasers();
     }
 

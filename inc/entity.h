@@ -1,12 +1,20 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include <stdbool.h>
+
 #define INVADER 0
 #define BLOCK 1
 #define LASER 2
 #define PLAYER 3
 
-#include <stdbool.h>
+enum entityType
+{
+    typeInvader = 0,
+    typeBlock = 1,
+    typeLaser = 2,
+    typePlayer = 3
+};
 
 struct entity
 {
@@ -29,4 +37,5 @@ struct entity newEntity(unsigned type, unsigned char symbol, unsigned health);
 struct pos getPos(signed char x, signed char y);
 bool posEquals(struct pos coords1, struct pos coords2);
 struct entity damageEntity(struct entity entity, unsigned char damage);
+
 #endif

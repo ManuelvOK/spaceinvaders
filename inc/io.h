@@ -7,7 +7,8 @@
 void terminate();
 void startVisuals();
 void stopVisuals();
-void drawSpace();
+void drawSpaceOutline(struct space *space);
+void drawSpace(struct space *space);
 bool handleInput();
 
 #endif

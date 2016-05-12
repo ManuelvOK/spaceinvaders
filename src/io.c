@@ -34,11 +34,28 @@ void stopVisuals()
     endwin();
 }
 
-// Prints the contents of the global space on the screen.
-void drawSpace()
+// Prints the outline of a space.
+void drawSpaceOutline(struct space *space)
 {
-    struct space *space = getSpace();
+    if (space == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
 
+    for (unsigned char y = 0; y < space->height; y++)
+    {
+        for (unsigned char x = 0; x < space->width; x++)
+        {
+            mvprintw(y, x*2 + 1, "|");
+        }
+    }
+
+    refresh();
+}
+
+// Prints the contents of a space on the screen.
+void drawSpace(struct space *space)
+{
     if (space == NULL)
     {
         exit(EXIT_FAILURE);
@@ -56,11 +73,11 @@ void drawSpace()
 
             if (getEntity(getSpace(), currentPos).health == 0)
             {
-                mvprintw(y, x*2, "_|");
+                mvprintw(y, x*2, "_");
             }
             else
             {
-                mvprintw(y, x*2, "%c|", getEntity(getSpace(), currentPos).symbol);
+                mvprintw(y, x*2, "%c", getEntity(getSpace(), currentPos).symbol);
             }
         }
     }
