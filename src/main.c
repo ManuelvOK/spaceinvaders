@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "../inc/entity.h"
-#include "../inc/field.h"
+#include "../inc/board.h"
 #include "../inc/io.h"
 
 #define WIDTH 64
@@ -12,7 +12,7 @@
 int main(void)
 {
 
-    struct field fld = fldCreate(WIDTH, HEIGHT);
+    struct board brd = brdCreate(WIDTH, HEIGHT);
 
     // test
     struct entity e;
@@ -21,7 +21,7 @@ int main(void)
     entSetSymbol(&e, 'a');
     printf("%c\n", entGetSymbol(e));
 
-    fldFree(&fld);
+    brdFree(&brd);
 
     return 0;
 }

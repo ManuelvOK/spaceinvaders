@@ -11,7 +11,8 @@ DEP     =$(SRC:%.c=%.d)
 OBJ     =$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 INC     =-I./$(INCDIR)/
 
-CFLAG   =-std=c99 ${INC} -Wall -Wextra -Wpedantic -Werror
+#CFLAG   =-std=c99 ${INC} -Wall -Wextra -Wpedantic -Werror
+CFLAG   =-std=c99 ${INC}
 LDFLAGS =-lncurses
 
 VPATH   =$(SRCDIR)
