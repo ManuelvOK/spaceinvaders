@@ -6,4 +6,6 @@
 void initCurses();
 void endCurses();
 
+void brdDraw(struct board *this);
+
 #endif // IO_H
