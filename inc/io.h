@@ -1,6 +1,9 @@
 #ifndef IO_H
 #define IO_H
 
-void drawBoard(void);
+#include "board.h"
+
+void initCurses();
+void endCurses();
 
 #endif // IO_H

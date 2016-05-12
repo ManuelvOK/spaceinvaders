@@ -11,15 +11,10 @@
 
 int main(void)
 {
-
     struct board brd = brdCreate(WIDTH, HEIGHT);
 
-    // test
-    struct entity e;
-    entSetSymbol(&e, 'A');
-    printf("%c\n", entGetSymbol(e));
-    entSetSymbol(&e, 'a');
-    printf("%c\n", entGetSymbol(e));
+    initCurses();
+    endCurses();
 
     brdFree(&brd);
 
