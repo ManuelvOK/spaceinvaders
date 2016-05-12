@@ -14,6 +14,7 @@ struct board brdCreate(unsigned width, unsigned height);
 void brdFree(struct board *this);
 
 struct entity brdGet(struct board *this, unsigned x, unsigned y);
+struct entity *brdGetRow(struct board *this, unsigned y);
 void brdSet(struct board *this, struct entity value, unsigned x, unsigned y);
 
 #endif //SPACEINVADERS_FIELD_H

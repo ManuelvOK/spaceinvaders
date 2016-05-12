@@ -29,6 +29,13 @@ struct entity brdGet(struct board *this, unsigned x, unsigned y)
     return this->data[y * this->width + x];
 }
 
+struct entity *brdGetRow(struct board *this, unsigned y)
+{
+    if (y >= this->height) return NULL;
+
+    return this->data + (y * this->width);
+}
+
 void brdSet(struct board *this, struct entity value, unsigned x, unsigned y)
 {
     if (x >= this->width)  return;
