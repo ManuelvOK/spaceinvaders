@@ -9,6 +9,7 @@ struct entity
 
 struct entity entCreateEmpty();
 
+inline int entIsEmpty(struct entity ent);
 inline char entGetSymbol(struct entity ent);
 inline void entSetSymbol(struct entity *this, char symbol);
 

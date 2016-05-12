@@ -1,5 +1,7 @@
 #include "../inc/entity.h"
 
+
+
 struct entity entCreateEmpty()
 {
     struct entity e;
@@ -8,6 +10,19 @@ struct entity entCreateEmpty()
     e.health = 0;
 
     return e;
+}
+
+inline int entIsEmpty(struct entity ent)
+{
+    union
+    {
+        struct entity ent;
+        unsigned char chr;
+    } u;
+
+    u.ent = ent;
+
+    return u.chr == 0;
 }
 
 inline char entGetSymbol(struct entity ent)
