@@ -7,8 +7,10 @@
 #include <entity.h>
 #include <player.h>
 #include <barrier.h>
+#include <fighter.h>
 
 /// delay function by Vilhelm Gray on http://stackoverflow.com/questions/3930363/implement-time-delay-in-c
+// todo: replace by less cpu power consuming function
 void delay(double dly){
     /* save start clock tick */
     const clock_t start = clock();
@@ -27,12 +29,27 @@ int main(void) {
     init_display();
     init_player_class();
     init_barrier_class();
+    init_fighter_class();
     
     //place barriers
-    int i;
-    for (i = 0; i < 10; i++) {
-        struct object *barrier = create_from(barrier_class);
-        call(barrier,GOTO,i+2.0,5.0);
+    int x,y;
+    int barriertemplate[3][7] = {{0,0,1,1,1,0,0},{0,1,0,0,0,1,0},{0,1,0,0,0,1,0}};
+    for (x = 1; x < WIDTH; ++x) {
+        for (y = 0; y < 3; ++y) {
+            if (barriertemplate[y][x%7]) {
+                struct object *barrier = create_from(barrier_class);
+                call(barrier, GOTO, (float)x, (float)y+HEIGHT-6);
+            }
+        }
+    }
+    //insert fighter
+    for (x = 1; x < WIDTH; ++x) {
+        for (y = 0; y < 3; ++y) {
+            if (!(x%3)) {
+                struct object *fighter = create_from(fighter_class);
+                call(fighter, GOTO, (float)x, (float)y*3+2);
+            }
+        }
     }
     
     struct object *player = create_from(player_class);

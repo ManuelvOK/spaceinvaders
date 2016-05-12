@@ -18,6 +18,7 @@ enum {
     DX,DY,
     HEADING,
     HEALTH,
+    COUNTER,
     UPDATE,         // ()
     MOVE,           // (direction)
     GOTO,           // (x,y)

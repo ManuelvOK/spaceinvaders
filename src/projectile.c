@@ -17,7 +17,8 @@ static void init(struct object *projectile) {
 
 static void *update(struct object *projectile,va_list args) {
     (void)args;
-    call(projectile,MOVE,UP);
+    int *heading = attr(projectile,HEADING);
+    call(projectile,MOVE,*heading);
     return NULL;
 }
 
@@ -38,11 +39,13 @@ static void *fire(struct object *entity, va_list args) {
     int *heading = attr(entity,HEADING);
     int dx = 0;
     int dy = 0;
-    dx += 0 != (*heading & RIGHT);
-    dx -= 0 != (*heading & LEFT);
-    dy += 0 != (*heading & DOWN);
-    dy -= 0 != (*heading & UP);
+    dx += !!(*heading & RIGHT);
+    dx -= !!(*heading & LEFT);
+    dy += !!(*heading & DOWN);
+    dy -= !!(*heading & UP);
     struct object *projectile = create_from(projectile_class);
+    int *p_heading = attr(projectile,HEADING);
+    *p_heading = *heading;
     call(projectile,GOTO,*x+dx,*y+dy);
     return NULL;
 }

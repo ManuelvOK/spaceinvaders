@@ -24,7 +24,7 @@ static void init(struct object *player) {
     *h = UP;
     *dx = 0;
     *dy = 0;
-    call(player,GOTO,(float) WIDTH/2, (float) HEIGHT/2);
+    call(player,GOTO,(float) WIDTH/2, (float) HEIGHT-2);
 }
 
 static void deinit(struct object *player) {
