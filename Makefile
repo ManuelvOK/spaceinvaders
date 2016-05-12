@@ -39,7 +39,7 @@ build/%.o: %.c
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
-	-rm $(EXE) $(OBJ) $(DEP)
+	-rm $(EXE) $(OBJDIR)/*  $(SRCDIR)/*.d
 	-rm -r $(OBJDIR)
 
 $(OBJDIR):

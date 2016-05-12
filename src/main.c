@@ -1,29 +1,44 @@
-// TODO: Breite und Hoehe automatisch auslesen (statt hard zu coden)
 #include <curses.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "../inc/board.h"
 #include "../inc/entity.h"
 #include "../inc/io.h"
 
 #define WIDTH 64
-#define HEIGHT 32
+#define HEIGHT 20
+
+/* Spawns the a block of enemies.  */
+void spawnEnemies(struct board *brd);
 
 int main(void)
 {
     struct board brd = brdCreate(WIDTH, HEIGHT);
-    struct entity ent = entCreateEmpty();
 
-    entSetSymbol(&ent, 'X');
-    brdSet(&brd, ent, 2, 5);
+    spawnEnemies(&brd);
 
     initCurses();
+
     brdDraw(&brd);
     getch();
-    endCurses();
 
+    endCurses();
     brdFree(&brd);
 
     return 0;
+}
+
+void spawnEnemies(struct board *brd)
+{
+    int x, y;
+    struct entity enemy;
+
+    entSetSymbol(&enemy, 'W');
+    enemy.health = 0;
+
+    for (x = 0; x < 12; x++)
+    {
+        for (y = 0; y < 10; y++)
+        {
+            brdSet(brd, enemy, 4 * x + 4, y);
+        }
+    }
 }

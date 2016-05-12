@@ -2,7 +2,6 @@
 #include "../inc/io.h"
 
 #include <curses.h>
-#include <stdlib.h>
 
 void initCurses()
 {
