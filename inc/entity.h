@@ -1,30 +1,28 @@
 #ifndef SPACEINVADERS_ENTITY_H
 #define SPACEINVADERS_ENTITY_H
 
-/* Represents an entity of the game (pixel, monster, player, etc...).
- *
- * If you want to access the ascii symbol of the entity, use entGetSymbol() and
- * entSetSymbol() instead of accessing ent.symbol directly.
- *
- * You can only store ascii values 32 through 95 including
- * (includes capital letters, numbers, space and a few symbols).
- */
+#define ETYPE_EMPTY 0
+#define ETYPE_MONSTER 1
+#define ETYPE_PLAYER 2
+#define ETYPE_LASER 4
+
+/* Represents an entity of the game (pixel, monster, player, etc...). */
 struct entity
 {
-    unsigned char symbol : 6;
-    unsigned char health : 2;
+    unsigned char type : 4;
+	unsigned char health : 4;
 };
+
+/* checks if en entity is empty */
+static inline int entIsEmpty(struct entity ent)
+{
+	return ent.type == ETYPE_EMPTY;
+}
 
 /* creates a new empty entity */
 struct entity entCreateEmpty();
 
-/* checks if en entity is empty */
-inline int entIsEmpty(struct entity ent);
-
-/* returns the symbol of an entity */
-inline char entGetSymbol(struct entity ent);
-
-/* sets the symbol of an entity */
-inline void entSetSymbol(struct entity *this, char symbol);
+/* creates a new monser */
+struct entity entCreateMonster();
 
 #endif // SPACEINVADERS_ENTITY_H

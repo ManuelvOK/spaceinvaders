@@ -11,6 +11,7 @@ struct board
     unsigned height;
     unsigned xoffset;
     unsigned yoffset;
+	char monster_state;
 };
 
 /* Creates a new board filled with empty entities. */

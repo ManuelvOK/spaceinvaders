@@ -4,23 +4,18 @@ struct entity entCreateEmpty()
 {
     struct entity e;
 
-    e.symbol = 0;
+    e.type = ETYPE_EMPTY;
     e.health = 0;
 
     return e;
 }
 
-inline int entIsEmpty(struct entity ent)
+struct entity entCreateMonster()
 {
-    return ent.symbol == 0;
-}
+    struct entity e;
 
-inline char entGetSymbol(struct entity ent)
-{
-    return ent.symbol + (char)32;
-}
+    e.type = ETYPE_MONSTER;
+    e.health = 1;
 
-inline void entSetSymbol(struct entity *this, char symbol)
-{
-    this->symbol = symbol - (char)32;
+    return e;
 }

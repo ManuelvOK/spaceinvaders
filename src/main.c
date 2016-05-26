@@ -29,10 +29,7 @@ int main(void)
 void spawnEnemies(struct board *brd)
 {
     int x, y;
-    struct entity enemy;
-
-    entSetSymbol(&enemy, 'W');
-    enemy.health = 0;
+    struct entity enemy = entCreateMonster();
 
     for (x = 0; x < 12; x++)
     {
