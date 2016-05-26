@@ -12,7 +12,7 @@ struct entity *init_entity(enum entity_type type, unsigned x, unsigned y,
     ent->pos = (struct position) {x, y};
     ent->symbol = symbol;
     ent->next = NULL;
-    ent->valid = 1;
+    ent->valid = true;
     return ent;
 }
 
