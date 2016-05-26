@@ -9,6 +9,8 @@ struct board
     struct entity *data;
     unsigned width;
     unsigned height;
+    unsigned xoffset;
+    unsigned yoffset;
 };
 
 /* Creates a new board filled with empty entities. */

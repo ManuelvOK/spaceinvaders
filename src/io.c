@@ -31,6 +31,6 @@ void brdDraw(struct board *this)
             str[x] = entGetSymbol(row[x]);
 
         // print string
-        mvaddstr(y, 0, str);
+        mvaddstr(y + this->yoffset, this->xoffset, str);
     }
 }

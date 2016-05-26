@@ -11,6 +11,8 @@ struct board brdCreate(unsigned width, unsigned height)
 
     brd.width = width;
     brd.height = height;
+    brd.xoffset = 0;
+    brd.yoffset = 0;
     brd.data = (struct entity*)calloc(width * height, sizeof(struct entity));
 
     return brd;
