@@ -35,6 +35,7 @@ struct entity *init_fighter(unsigned x, unsigned y) {
 struct entity *init_laser(unsigned x, unsigned y, enum direction dir) {
     struct entity *e = init_entity(E_LASER, x, y, 1, '|');
     e->ent.as_laser.dir = dir;
+    return e;
 }
 
 struct entity *init_wall(unsigned x, unsigned y) {
@@ -68,6 +69,8 @@ void list_foreach(struct entity_list *l, void (*f)(struct entity *)) {
 
 
 void list_filter(struct entity_list *l, int (*p)(struct entity *)) {
+    (void) l;
+    (void) p;
     return;
 }
 
