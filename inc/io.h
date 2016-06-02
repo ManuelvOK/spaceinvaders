@@ -10,5 +10,6 @@ void stopVisuals();
 void drawSpaceOutline(struct space *space);
 void drawSpace(struct space *space);
 bool handleInput();
+void saveSpaceToFile(struct space *space);
 
 #endif

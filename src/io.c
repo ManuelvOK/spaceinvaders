@@ -85,27 +85,66 @@ void drawSpace(struct space *space)
     refresh();
 }
 
-// Reads possible keyboard input and returns whether KEY_QUIT was pressed.
+// Reads possible keyboard input and returns whether K_EXIT was pressed.
 bool handleInput()
 {
     int ch = getch();
 
-    if (ch == KEY_QUIT)
+    if (ch == K_EXIT)
     {
         return false;
     }
-    else if (ch == KEY_MOVE_LEFT)
+    else if (ch == K_MOVE_LEFT)
     {
         movePlayer(-1);
     }
-    else if (ch == KEY_MOVE_RIGHT)
+    else if (ch == K_MOVE_RIGHT)
     {
         movePlayer(1);
     }
-    else if (ch == KEY_SHOOT)
+    else if (ch == K_SHOOT)
     {
         spawnPlayerLaser();
     }
+    else if (ch == K_SAVE)
+    {
+        saveSpaceToFile(getSpace());
+    }
 
     return true;
+}
+
+// Saves the current state of a space to a file.
+void saveSpaceToFile(struct space *space)
+{
+    if (space == NULL)
+    {
+        terminate();
+    }
+
+    FILE *saveFile = fopen("savefile", "w+");
+    fprintf(saveFile, "SP %3d %3d\n", space->width, space->height);
+    fprintf(saveFile, "x  |y  |t|s|h t=type,s=symbol,h=health\n");
+    struct entity currentEntity;
+    struct pos currentPos;
+
+    for (unsigned char y = 0; y < space->height; y++)
+    {
+        currentPos.y = y;
+
+        for (unsigned char x = 0; x < space->width; x++)
+        {
+            currentPos.x = x;
+            currentEntity = getEntity(space, currentPos);
+
+            // Only save alive entities
+            if (currentEntity.health > 0)
+            {
+                fprintf(saveFile, "%3d %3d %1d %1c %1d\n", x, y, currentEntity.type, currentEntity.symbol, currentEntity.health);
+            }
+        }
+    }
+
+    mvprintw(space->height + 5, 0, "File saved!");
+    fclose(saveFile);
 }
