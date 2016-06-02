@@ -4,3 +4,4 @@ build/*
 *.d
 spaceinvaders
 CMakeLists.txt
+savegame
