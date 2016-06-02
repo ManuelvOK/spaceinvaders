@@ -1,6 +1,7 @@
 #ifndef SPACEINVADERS_FIELD_H
 #define SPACEINVADERS_FIELD_H
 
+#include <stdio.h>
 #include "entity.h"
 
 /* Stores a 2-dimensional array of entities. */
@@ -32,5 +33,11 @@ struct entity *brdGetRow(struct board *this, unsigned y);
 
 /* Sets an entity at a given coordinate. */
 void brdSet(struct board *this, struct entity value, unsigned x, unsigned y);
+
+/*!
+ * Writes the board to the given file and returns the number of bytes written
+ * or 0 if something went wrong.
+ */
+size_t brdWrite(struct board *this, FILE *file);
 
 #endif //SPACEINVADERS_FIELD_H
