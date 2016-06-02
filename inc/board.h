@@ -34,8 +34,15 @@ struct entity *brdGetRow(struct board *this, unsigned y);
 /* Sets an entity at a given coordinate. */
 void brdSet(struct board *this, struct entity value, unsigned x, unsigned y);
 
-/*!
- * Writes the board to the given file and returns the number of bytes written
+/* Reads a board from a file, that was written by the brdWrite function.
+ * Returns the number of bytes read or 0 if something went wrong.
+ *
+ * NOTE: The board is created with brdCreate so you wanna call brdFree when
+ *       you are done.
+ * */
+size_t brdRead(struct board *brd, FILE *file);
+
+/* Writes the board to the given file and returns the number of bytes written
  * or 0 if something went wrong.
  */
 size_t brdWrite(struct board *this, FILE *file);

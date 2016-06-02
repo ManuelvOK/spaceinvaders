@@ -51,6 +51,49 @@ void brdSet(struct board *this, struct entity value, unsigned x, unsigned y)
     this->data[INDEX(x, y, this->width)] = value;
 }
 
+size_t brdRead(struct board *brd, FILE *file)
+{
+    uint16_t width, height, xoffset, yoffset;
+    uint8_t monster_state;
+    size_t total = 0;
+    size_t read;
+
+    read = fread(&width, sizeof(width), 1, file);
+    if (read != 1) return 0;
+    total += read;
+
+    read = fread(&height, sizeof(height), 1, file);
+    if (read != 1) return 0;
+    total += read;
+
+    read = fread(&xoffset, sizeof(xoffset), 1, file);
+    if (read != 1) return 0;
+    total += read;
+
+    read = fread(&yoffset, sizeof(yoffset), 1, file);
+    if (read != 1) return 0;
+    total += read;
+
+    read = fread(&monster_state, sizeof(monster_state), 1, file);
+    if (read != 1) return 0;
+    total += read;
+
+    *brd = brdCreate(width, height);
+    brd->xoffset = xoffset;
+    brd->yoffset = yoffset;
+    brd->monster_state = monster_state;
+
+    read = fread(brd->data, sizeof(brd->data[0]), width * height, file);
+    if (read != width * height)
+    {
+        brdFree(brd);
+        return 0;
+    }
+    total += read;
+
+    return total;
+}
+
 size_t brdWrite(struct board *this, FILE *file)
 {
     uint16_t width = (uint16_t)this->width;
@@ -63,27 +106,27 @@ size_t brdWrite(struct board *this, FILE *file)
 
     written = fwrite(&width, sizeof(width), 1, file);
     if (written != 1) return 0;
-    total += sizeof(width);
+    total += written;
 
     written = fwrite(&height, sizeof(height), 1, file);
     if (written != 1) return 0;
-    total += sizeof(height);
+    total += written;
 
     written = fwrite(&xoffset, sizeof(xoffset), 1, file);
     if (written != 1) return 0;
-    total += sizeof(xoffset);
+    total += written;
 
     written = fwrite(&yoffset, sizeof(yoffset), 1, file);
     if (written != 1) return 0;
-    total += sizeof(yoffset);
+    total += written;
 
     written = fwrite(&monster_state, sizeof(monster_state), 1, file);
     if (written != 1) return 0;
-    total += sizeof(monster_state);
+    total += written;
 
     written = fwrite(this->data, sizeof(this->data[0]), width * height, file);
     if (written != width * height) return 0;
-    total += sizeof(this->data[0]) * width * height;
+    total += written;
 
     return total;
 }
