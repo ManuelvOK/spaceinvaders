@@ -1,6 +1,8 @@
 #ifndef ENTITIES_H
 #define ENTITIES_H
 
+#include <stdbool.h>
+
 enum entity_type {
     E_PLAYER,
     E_FIGHTER,
@@ -43,7 +45,7 @@ struct entity {
         struct laser as_laser;
     } ent;
     struct entity *next;
-    int valid;
+    bool valid;
 };
 
 struct entity_list {
