@@ -8,7 +8,7 @@
 
 /* Saves the current game state to a file and returns the number of bytes
  * written. If something went wrong, 0 is returned.*/
-size_t saveGameState(const char *filename, struct board *brd);
+size_t writeGameState(const char *filename, struct board *brd);
 
 /* Spawns the a block of enemies. */
 void spawnEnemies(struct board *brd);
@@ -23,7 +23,7 @@ int main(void)
 
     brdDraw(&brd);
     getch();
-    saveGameState("savegame", &brd);
+    writeGameState("savegame", &brd);
 
     endCurses();
     brdFree(&brd);
@@ -31,7 +31,7 @@ int main(void)
     return 0;
 }
 
-size_t saveGameState(const char *filename, struct board *brd)
+size_t writeGameState(const char *filename, struct board *brd)
 {
     size_t total;
     FILE *file = fopen(filename, "w+");
