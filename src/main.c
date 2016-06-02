@@ -21,19 +21,30 @@ size_t writeGameState(const char *filename, struct board *brd);
 /* Spawns the a block of enemies. */
 void spawnEnemies(struct board *brd);
 
-int main(void)
+int main(int argc, char *argv[])
 {
     struct board brd;
 
-    brd = brdCreate(WIDTH, HEIGHT);
-
-    spawnEnemies(&brd);
+    // load from savegame
+    if (argc > 1)
+    {
+        if (readGameState(argv[1], &brd) == 0)
+        {
+            fprintf(stderr, "Can't read savegame.\n");
+            return 1;
+        }
+    }
+    // new game
+    else
+    {
+        brd = brdCreate(WIDTH, HEIGHT);
+        spawnEnemies(&brd);
+    }
 
     initCurses();
 
     brdDraw(&brd);
     getch();
-    writeGameState("savegame", &brd);
 
     endCurses();
     brdFree(&brd);
