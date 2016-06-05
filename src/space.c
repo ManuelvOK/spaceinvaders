@@ -15,7 +15,7 @@ struct space *newSpace(unsigned char width, unsigned char height)
         terminate();
     }
 
-    struct entity deadEntity = newEntity(INVADER, '.', 0);
+    struct entity deadEntity = newEntity(T_INVADER, '.', 0);
     
     for (unsigned i = 0; i < size; i++)
     {

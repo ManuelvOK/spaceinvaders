@@ -10,6 +10,7 @@
 void terminate()
 {
     endwin();
+    printf("An error occurred. The program had to shut down.");
     exit(EXIT_FAILURE);
 }
 
@@ -22,8 +23,8 @@ void startVisuals()
     noecho();
     timeout(0);
 
-    mvprintw(HEIGHT + 1, 0, "Controls: A - move left, D - move right, SPACEBAR - shoot");
-    mvprintw(HEIGHT + 2, 0, "Press ESC to exit");
+    mvprintw(P_HEIGHT + 1, 0, "Controls: A - move left, D - move right, SPACEBAR - shoot");
+    mvprintw(P_HEIGHT + 2, 0, "Press ESC to exit");
     
     refresh();
 }
@@ -58,7 +59,7 @@ void drawSpace(struct space *space)
 {
     if (space == NULL)
     {
-        exit(EXIT_FAILURE);
+        terminate();
     }
 
     struct pos currentPos;
@@ -90,25 +91,29 @@ bool handleInput()
 {
     int ch = getch();
 
-    if (ch == K_EXIT)
+    if (ch == K_EXIT || ch == K_EXIT_ALT)
     {
         return false;
     }
-    else if (ch == K_MOVE_LEFT)
+    else if (ch == K_MOVE_LEFT || ch == K_MOVE_LEFT_ALT)
     {
         movePlayer(-1);
     }
-    else if (ch == K_MOVE_RIGHT)
+    else if (ch == K_MOVE_RIGHT || ch == K_MOVE_RIGHT_ALT)
     {
         movePlayer(1);
     }
-    else if (ch == K_SHOOT)
+    else if (ch == K_SHOOT || ch == K_SHOOT_ALT)
     {
         spawnPlayerLaser();
     }
-    else if (ch == K_SAVE)
+    else if (ch == K_SAVE || ch == K_SAVE_ALT)
     {
         saveSpaceToFile(getSpace());
+    }
+    else if (ch == K_LOAD || ch == K_LOAD_ALT)
+    {
+        setSpace(loadSpaceFromFile());
     }
 
     return true;
@@ -123,8 +128,7 @@ void saveSpaceToFile(struct space *space)
     }
 
     FILE *saveFile = fopen("savefile", "w+");
-    fprintf(saveFile, "SP %3d %3d\n", space->width, space->height);
-    fprintf(saveFile, "x  |y  |t|s|h t=type,s=symbol,h=health\n");
+    fprintf(saveFile, "SP %hhu %hhu\n", space->width, space->height);
     struct entity currentEntity;
     struct pos currentPos;
 
@@ -140,11 +144,49 @@ void saveSpaceToFile(struct space *space)
             // Only save alive entities
             if (currentEntity.health > 0)
             {
-                fprintf(saveFile, "%3d %3d %1d %1c %1d\n", x, y, currentEntity.type, currentEntity.symbol, currentEntity.health);
+                fprintf(saveFile, "%u %u %u %u %u\n", x, y, currentEntity.type, currentEntity.symbol, currentEntity.health);
             }
         }
     }
 
     mvprintw(space->height + 5, 0, "File saved!");
     fclose(saveFile);
+}
+
+// Reads a save file and returns the saved space within.
+struct space *loadSpaceFromFile()
+{
+    FILE *saveFile = fopen("savefile", "r");
+    if (saveFile == NULL)
+    {
+        terminate();
+    }
+
+    unsigned char width, height;
+    fscanf(saveFile, "SP %hhu %hhu", &width, &height);
+
+    struct space *space = newSpace(width, height);
+    struct entity entity = newEntity(T_INVADER, '.', 0);
+    struct pos coords;
+    signed char x, y;
+    unsigned type, symbol, health;
+
+    while (fscanf(saveFile, "%hhi %hhi %u %u %u", &x, &y, &type, &symbol, &health) != EOF)
+    {
+        coords = (struct pos){ x, y };
+        entity.type = type;
+        entity.symbol = symbol;
+        entity.health = health;
+
+        if (type == T_PLAYER)
+        {
+            setPlayer(space, coords, entity);
+        }
+        else
+        {
+            setEntity(space, coords, entity);
+        }
+    }
+
+    return space;
 }

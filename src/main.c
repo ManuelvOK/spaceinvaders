@@ -20,7 +20,7 @@ int main()
         }
 
         drawSpace(getSpace());
-        napms(REFRESH_SPEED);
+        napms(P_REFRESH_SPEED);
         updateLasers();
     }
 

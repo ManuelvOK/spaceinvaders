@@ -3,17 +3,12 @@
 
 #include <stdbool.h>
 
-#define INVADER 0
-#define BLOCK 1
-#define LASER 2
-#define PLAYER 3
-
 enum entityType
 {
-    typeInvader = 0,
-    typeBlock = 1,
-    typeLaser = 2,
-    typePlayer = 3
+    T_INVADER = 0,
+    T_BLOCK = 1,
+    T_LASER = 2,
+    T_PLAYER = 3,
 };
 
 struct entity

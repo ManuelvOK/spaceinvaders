@@ -10,5 +10,6 @@ void movePlayer(unsigned char deltaX);
 void spawnPlayerLaser();
 void updateLasers();
 void moveInvaders();
+void setSpace(struct space *space);
 
 #endif

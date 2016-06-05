@@ -44,7 +44,7 @@ struct entity damageEntity(struct entity entity, unsigned char damage)
         entity.health = 0;
     }
 
-    if (entity.type == BLOCK)
+    if (entity.type == T_BLOCK)
     {
         if (entity.health == 2)
         {

@@ -7,12 +7,12 @@ struct space *globalSpace = NULL;
 // Initialises and sets up the global space.
 void setupSpace()
 {
-    globalSpace = newSpace(WIDTH, HEIGHT);
+    globalSpace = newSpace(P_WIDTH, P_HEIGHT);
     
-    struct entity player = newEntity(PLAYER, 'P', 1);
-    struct entity invader = newEntity(INVADER, 'Y', 1);
-    struct entity block = newEntity(BLOCK, '#', 3);
-    setPlayer(globalSpace, getPos((unsigned char)(WIDTH / 2), HEIGHT - 1), player);
+    struct entity player = newEntity(T_PLAYER, 'P', 1);
+    struct entity invader = newEntity(T_INVADER, 'Y', 1);
+    struct entity block = newEntity(T_BLOCK, '#', 3);
+    setPlayer(globalSpace, getPos((unsigned char)(P_WIDTH / 2), P_HEIGHT - 1), player);
 
     for (unsigned char x = 0; x < globalSpace->width; x++)
     {
@@ -32,6 +32,12 @@ struct space *getSpace()
     return globalSpace;
 }
 
+// Sets the gobal space variable.
+void setSpace(struct space *space)
+{
+    globalSpace = space;
+}
+
 // Wrapper for moving the player of the global space horizontally.
 void movePlayer(unsigned char deltaX)
 {
@@ -41,7 +47,7 @@ void movePlayer(unsigned char deltaX)
 // Spawns a laser in front of the player of the global space.
 void spawnPlayerLaser()
 {
-    struct entity laser = newEntity(LASER, '\'', 1);
+    struct entity laser = newEntity(T_LASER, '\'', 1);
     struct pos spawnPos = getPlayerPos(globalSpace);
     spawnPos.y--;
 
@@ -51,7 +57,7 @@ void spawnPlayerLaser()
 // Moves all lasers up, damaging every entity they collide with.
 void updateLasers()
 {
-    struct entity deadEntity = newEntity(INVADER, '.', 0);
+    struct entity deadEntity = newEntity(T_INVADER, '.', 0);
 
     for (unsigned char y = 0; y < globalSpace->height; y++)
     {
@@ -59,7 +65,7 @@ void updateLasers()
         {
             struct entity current = getEntity(globalSpace, getPos(x, y));
 
-            if (current.type == LASER)
+            if (current.type == T_LASER)
             {
                 // Laser despawns at upper edge of space
                 if (y == 0)
