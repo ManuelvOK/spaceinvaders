@@ -35,23 +35,27 @@ void stopVisuals()
     endwin();
 }
 
-// Prints the outline of a space.
-void drawSpaceOutline(struct space *space)
+// Prints the padding of a space.
+void drawSpacePadding(struct space *space)
 {
     if (space == NULL)
     {
         exit(EXIT_FAILURE);
     }
 
+    if (!P_PADDING)
+    {
+        return;
+    }
+
+    // Draw vertical lines
     for (unsigned char y = 0; y < space->height; y++)
     {
         for (unsigned char x = 0; x < space->width; x++)
         {
-            mvprintw(y, x*2 + 1, "|");
+            mvprintw(y, x * (P_PADDING + 1) + 1, "%c", P_PADDING_CHAR_V);
         }
     }
-
-    refresh();
 }
 
 // Prints the contents of a space on the screen.
@@ -64,21 +68,21 @@ void drawSpace(struct space *space)
 
     struct pos currentPos;
 
-    for (unsigned char y = 0; y < space->height; y++)
+    for (signed char y = 0; y < space->height; y++)
     {
         currentPos.y = y;
 
-        for (unsigned char x = 0; x < space->width; x++)
+        for (signed char x = 0; x < space->width; x++)
         {
             currentPos.x = x;
 
             if (getEntity(getSpace(), currentPos).health == 0)
             {
-                mvprintw(y, x*2, "_");
+                mvprintw(y, x * (P_PADDING + 1), "%c", P_NO_ENTITY_CHAR);
             }
             else
             {
-                mvprintw(y, x*2, "%c", getEntity(getSpace(), currentPos).symbol);
+                mvprintw(y, x * (P_PADDING + 1), "%c", getEntity(getSpace(), currentPos).symbol);
             }
         }
     }
@@ -86,7 +90,7 @@ void drawSpace(struct space *space)
     refresh();
 }
 
-// Reads possible keyboard input and returns whether K_EXIT was pressed.
+// Reads possible keyboard input and returns whether the program should continue.
 bool handleInput()
 {
     int ch = getch();
@@ -132,11 +136,11 @@ void saveSpaceToFile(struct space *space)
     struct entity currentEntity;
     struct pos currentPos;
 
-    for (unsigned char y = 0; y < space->height; y++)
+    for (signed char y = 0; y < space->height; y++)
     {
         currentPos.y = y;
 
-        for (unsigned char x = 0; x < space->width; x++)
+        for (signed char x = 0; x < space->width; x++)
         {
             currentPos.x = x;
             currentEntity = getEntity(space, currentPos);
@@ -144,7 +148,7 @@ void saveSpaceToFile(struct space *space)
             // Only save alive entities
             if (currentEntity.health > 0)
             {
-                fprintf(saveFile, "%u %u %u %u %u\n", x, y, currentEntity.type, currentEntity.symbol, currentEntity.health);
+                fprintf(saveFile, "%hhi %hhi %u %u %u\n", x, y, currentEntity.type, currentEntity.symbol, currentEntity.health);
             }
         }
     }

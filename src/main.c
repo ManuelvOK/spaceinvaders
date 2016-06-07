@@ -10,7 +10,7 @@ int main()
 {
     startVisuals();
     setupSpace();
-    drawSpaceOutline(getSpace());
+    drawSpacePadding(getSpace());
 
     while (true)
     {

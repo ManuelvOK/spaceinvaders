@@ -7,7 +7,7 @@
 void terminate();
 void startVisuals();
 void stopVisuals();
-void drawSpaceOutline(struct space *space);
+void drawSpacePadding(struct space *space);
 void drawSpace(struct space *space);
 bool handleInput();
 void saveSpaceToFile(struct space *space);
