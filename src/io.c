@@ -66,6 +66,7 @@ void drawSpace(struct space *space)
         terminate();
     }
 
+    struct entity entity;
     struct pos currentPos;
 
     for (signed char y = 0; y < space->height; y++)
@@ -75,14 +76,21 @@ void drawSpace(struct space *space)
         for (signed char x = 0; x < space->width; x++)
         {
             currentPos.x = x;
+            entity = getEntity(getSpace(), currentPos);
 
-            if (getEntity(getSpace(), currentPos).health == 0)
+            if (entity.health == 0)
             {
                 mvprintw(y, x * (P_PADDING + 1), "%c", P_NO_ENTITY_CHAR);
             }
             else
             {
-                mvprintw(y, x * (P_PADDING + 1), "%c", getEntity(getSpace(), currentPos).symbol);
+                if (entity.canFire == 1)
+                {
+                    attron(A_BOLD);
+                }
+
+                mvprintw(y, x * (P_PADDING + 1), "%c", entity.symbol);
+                attroff(A_BOLD);
             }
         }
     }
@@ -118,6 +126,7 @@ bool handleInput()
     else if (ch == K_LOAD || ch == K_LOAD_ALT)
     {
         setSpace(loadSpaceFromFile());
+        updateCanFire();
     }
 
     return true;

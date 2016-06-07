@@ -14,7 +14,7 @@ struct entity newEntity(unsigned type, unsigned char symbol, unsigned health)
     newEntity.type = type;
     newEntity.symbol = symbol;
     newEntity.health = health;
-    newEntity.flag1 = newEntity.flag2 = newEntity.flag3 = newEntity.flag4 = 0;
+    newEntity.canFire = newEntity.flag2 = newEntity.flag3 = newEntity.flag4 = 0;
 
     return newEntity;
 }

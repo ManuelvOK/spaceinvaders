@@ -14,16 +14,20 @@ void setupSpace()
     struct entity block = newEntity(T_BLOCK, '#', 3);
     setPlayer(globalSpace, getPos((unsigned char)(P_WIDTH / 2), P_HEIGHT - 1), player);
 
-    for (unsigned char x = 0; x < globalSpace->width; x++)
+    for (unsigned char x = 1; x < globalSpace->width - 1; x++)
     {
         setEntity(globalSpace, getPos(x, 1), invader);
+        setEntity(globalSpace, getPos(x, 3), invader);
+        setEntity(globalSpace, getPos(x, 5), invader);
     }
 
     for (unsigned char x = 12; x < 17; x++)
     {
-        setEntity(globalSpace, getPos(x, 3), block);
+        setEntity(globalSpace, getPos(x, 9), block);
     }
     // TODO: Add more invaders, blocks
+
+    updateCanFire();
 }
 
 // Returns the global space variable.
@@ -58,19 +62,23 @@ void spawnPlayerLaser()
 void updateLasers()
 {
     struct entity deadEntity = newEntity(T_INVADER, '.', 0);
+    struct pos currentPos;
 
-    for (unsigned char y = 0; y < globalSpace->height; y++)
+    for (signed char y = 0; y < globalSpace->height; y++)
     {
-        for (unsigned char x = 0; x < globalSpace->width; x++)
+        currentPos.y = y;
+
+        for (signed char x = 0; x < globalSpace->width; x++)
         {
-            struct entity current = getEntity(globalSpace, getPos(x, y));
+            currentPos.x = x;
+            struct entity current = getEntity(globalSpace, currentPos);
 
             if (current.type == T_LASER)
             {
                 // Laser despawns at upper edge of space
                 if (y == 0)
                 {
-                    setEntity(globalSpace, getPos(x, y), deadEntity);
+                    setEntity(globalSpace, currentPos, deadEntity);
                 }
                 // Move and collide
                 else
@@ -80,15 +88,53 @@ void updateLasers()
                     if (entityAbove.health > 0)
                     {
                         setEntity(globalSpace, getPos(x, y - 1), damageEntity(entityAbove, 1));
-                        setEntity(globalSpace, getPos(x, y), deadEntity);
+                        setEntity(globalSpace, currentPos, deadEntity);
+                        updateCanFire();
                     }
                     else
                     {
                         setEntity(globalSpace, getPos(x, y - 1), current);
-                        setEntity(globalSpace, getPos(x, y), deadEntity);
+                        setEntity(globalSpace, currentPos, deadEntity);
                     }
                 }
             }
+        }
+    }
+}
+
+// Updates canFire flag for all entities.
+void updateCanFire()
+{
+    struct entity entity;
+    struct pos lowestInvaderPos = { -1, -1 };
+    struct pos currentPos;
+
+    for (signed char x = 0; x < globalSpace->width; x++)
+    {
+        currentPos.x = x;
+
+        for (signed char y = 0; y < globalSpace->height; y++)
+        {
+            currentPos.y = y;
+
+            // Disable canFire for all entities
+            entity = getEntity(globalSpace, currentPos);
+            entity.canFire = 0;
+            setEntity(globalSpace, currentPos, entity);
+
+            // Save lowest invader position
+            if (entity.health > 0 && entity.type == T_INVADER)
+            {
+                lowestInvaderPos = currentPos;
+            }
+        }
+
+        // Enable canFire for lowest invader if possible
+        if (lowestInvaderPos.x >= 0 && lowestInvaderPos.y >= 0)
+        {
+            entity = getEntity(globalSpace, lowestInvaderPos);
+            entity.canFire = 1;
+            setEntity(globalSpace, lowestInvaderPos, entity);
         }
     }
 }

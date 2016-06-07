@@ -16,8 +16,8 @@ struct entity
     unsigned type : 2;
     unsigned symbol : 7;
     unsigned health : 3;
-    unsigned flag1 : 1;     // Flag names are placeholders
-    unsigned flag2 : 1;
+    unsigned canFire : 1;
+    unsigned flag2 : 1;     // Flag names are placeholders
     unsigned flag3 : 1;
     unsigned flag4 : 1;
 };
