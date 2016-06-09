@@ -1,6 +1,5 @@
-#include <unistd.h>
 #include <ncurses.h>
-#include "../inc/behavior.h"
+#include "../inc/behaviour.h"
 #include "../inc/entity.h"
 #include "../inc/io.h"
 #include "../inc/globals.h"
@@ -21,6 +20,7 @@ int main()
 
         drawSpace(getSpace());
         napms(P_REFRESH_SPEED);
+        // invadersRandomAttack();
         updateLasers();
     }
 

@@ -1,22 +1,22 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../inc/behavior.h"
+#include "../inc/behaviour.h"
 #include "../inc/entity.h"
 #include "../inc/io.h"
 #include "../inc/globals.h"
 
 // Ends ncurses and makes the program terminate.
-void terminate()
+void terminate(char *message)
 {
     endwin();
-    printf("An error occurred. The program had to shut down.");
+    printf("An error occurred: '%s'\n", message);
     exit(EXIT_FAILURE);
 }
 
 // Sets up ncurses and shows misc. visual content.
 void startVisuals()
-{ 
+{
     initscr();
     keypad(stdscr, TRUE);
     curs_set(0);
@@ -25,7 +25,7 @@ void startVisuals()
 
     mvprintw(P_HEIGHT + 1, 0, "Controls: A - move left, D - move right, SPACEBAR - shoot");
     mvprintw(P_HEIGHT + 2, 0, "Press ESC to exit");
-    
+
     refresh();
 }
 
@@ -63,7 +63,7 @@ void drawSpace(struct space *space)
 {
     if (space == NULL)
     {
-        terminate();
+        terminate("drawSpace");
     }
 
     struct entity entity;
@@ -137,12 +137,12 @@ void saveSpaceToFile(struct space *space)
 {
     if (space == NULL)
     {
-        terminate();
+        terminate("saveSpaceToFile");
     }
 
     FILE *saveFile = fopen("savefile", "w+");
     fprintf(saveFile, "SP %hhu %hhu\n", space->width, space->height);
-    struct entity currentEntity;
+    struct entity current;
     struct pos currentPos;
 
     for (signed char y = 0; y < space->height; y++)
@@ -152,12 +152,14 @@ void saveSpaceToFile(struct space *space)
         for (signed char x = 0; x < space->width; x++)
         {
             currentPos.x = x;
-            currentEntity = getEntity(space, currentPos);
+            current = getEntity(space, currentPos);
 
             // Only save alive entities
-            if (currentEntity.health > 0)
+            if (current.health > 0)
             {
-                fprintf(saveFile, "%hhi %hhi %u %u %u\n", x, y, currentEntity.type, currentEntity.symbol, currentEntity.health);
+                fprintf(saveFile, "%hhi %hhi %u %u %u %u %u %u %u\n", x, y,
+                    current.type, current.symbol, current.health, current.canFire,
+                    current.moveUp, current.flag3, current.flag4);
             }
         }
     }
@@ -172,24 +174,44 @@ struct space *loadSpaceFromFile()
     FILE *saveFile = fopen("savefile", "r");
     if (saveFile == NULL)
     {
-        terminate();
+        terminate("loadSpaceFromFile invalid file");
     }
 
     unsigned char width, height;
-    fscanf(saveFile, "SP %hhu %hhu", &width, &height);
+    int readItems;
+    readItems = fscanf(saveFile, "SP %hhu %hhu", &width, &height);
+
+    if (readItems < 2)
+    {
+        terminate("loadSpaceFromFile invalid header");
+    }
 
     struct space *space = newSpace(width, height);
-    struct entity entity = newEntity(T_INVADER, '.', 0);
+    struct entity entity;
     struct pos coords;
     signed char x, y;
-    unsigned type, symbol, health;
+    unsigned type, symbol, health, canFire, moveUp, flag3, flag4;
 
-    while (fscanf(saveFile, "%hhi %hhi %u %u %u", &x, &y, &type, &symbol, &health) != EOF)
+    while (1)
     {
+        readItems = fscanf(saveFile, "%hhi %hhi %u %u %u %u %u %u %u", &x, &y,
+            &type, &symbol, &health, &canFire, &moveUp, &flag3, &flag4);
+
+        if (readItems == EOF)
+        {
+            break;
+        }
+        if (readItems < 5)
+        {
+            terminate("loadSpaceFromFile loop");
+        }
+
         coords = (struct pos){ x, y };
-        entity.type = type;
-        entity.symbol = symbol;
-        entity.health = health;
+        entity = newEntity(type, symbol, health);
+        entity.canFire = canFire;
+        entity.moveUp = moveUp;
+        entity.flag3 = flag3;
+        entity.flag4 = flag4;
 
         if (type == T_PLAYER)
         {

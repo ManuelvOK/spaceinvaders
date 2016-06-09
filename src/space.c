@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "../inc/io.h"
 #include "../inc/globals.h"
@@ -12,11 +13,11 @@ struct space *newSpace(unsigned char width, unsigned char height)
 
     if (newSpace == NULL || array == NULL)
     {
-        terminate();
+        terminate("newSpace");
     }
 
     struct entity deadEntity = newEntity(T_INVADER, '.', 0);
-    
+
     for (unsigned i = 0; i < size; i++)
     {
         array[i] = deadEntity;
@@ -42,7 +43,7 @@ void setPlayer(struct space *space, struct pos coords, struct entity player)
 {
     if (spaceOutOfBounds(space, coords))
     {
-        terminate();
+        terminate("setPlayer");
     }
 
     space->playerPos = coords;
@@ -54,7 +55,7 @@ struct pos getPlayerPos(struct space *space)
 {
     if (space == NULL)
     {
-        terminate();
+        terminate("getPlayerPos");
     }
 
     return space->playerPos;
@@ -65,7 +66,10 @@ void setEntity(struct space *space, struct pos coords, struct entity content)
 {
     if (spaceOutOfBounds(space, coords))
     {
-        terminate();
+        char *message = calloc(100, sizeof(char));
+        sprintf(message, "setEntity x: %d y: %d width: %d, height: %d", coords.x,
+            coords.y, P_WIDTH, P_HEIGHT);
+        terminate(message);
     }
 
     space->array[coords.y * space->width + coords.x] = content;
@@ -76,7 +80,10 @@ struct entity getEntity(struct space *space, struct pos coords)
 {
     if (spaceOutOfBounds(space, coords))
     {
-        terminate();
+        char *message = calloc(100, sizeof(char));
+        sprintf(message, "getEntity x: %d y: %d width: %d, height: %d", coords.x,
+            coords.y, P_WIDTH, P_HEIGHT);
+        terminate(message);
     }
 
     return space->array[coords.y * space->width + coords.x];
@@ -84,11 +91,11 @@ struct entity getEntity(struct space *space, struct pos coords)
 
 // Moves an entity of a space relatively to its current coordinates.
 void moveEntity(struct space *space, struct pos current, struct pos change)
-{   
+{
     struct pos newPos = { current.x + change.x, current.y + change.y };
-    
+
     if (!spaceOutOfBounds(space, newPos))
-    { 
+    {
         struct entity atCurrent = getEntity(space, current);
         struct entity atNew = getEntity(space, newPos);
 
@@ -96,7 +103,7 @@ void moveEntity(struct space *space, struct pos current, struct pos change)
         {
             setEntity(space, newPos, atCurrent);
             setEntity(space, current, atNew);
-        
+
             if (posEquals(getPlayerPos(space), current))
             {
                 space->playerPos = newPos;

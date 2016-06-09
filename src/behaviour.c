@@ -1,5 +1,7 @@
+#include <ncurses.h>
+#include <time.h>
 #include <stdlib.h>
-#include "../inc/behavior.h"
+#include "../inc/behaviour.h"
 #include "../inc/globals.h"
 
 struct space *globalSpace = NULL;
@@ -8,7 +10,7 @@ struct space *globalSpace = NULL;
 void setupSpace()
 {
     globalSpace = newSpace(P_WIDTH, P_HEIGHT);
-    
+
     struct entity player = newEntity(T_PLAYER, 'P', 1);
     struct entity invader = newEntity(T_INVADER, 'Y', 1);
     struct entity block = newEntity(T_BLOCK, '#', 3);
@@ -48,21 +50,30 @@ void movePlayer(unsigned char deltaX)
     moveEntity(globalSpace, getPlayerPos(globalSpace), getPos(deltaX, 0));
 }
 
+// Spawns a laser on the globalSpace at given coordinates.
+void spawnLaser(struct pos coords, unsigned moveUp)
+{
+    struct entity laser = newEntity(T_LASER, '\'', 1);
+    laser.moveUp = moveUp % 2;
+    coords.y += (laser.moveUp * (-2)) + 1;
+
+    setEntity(globalSpace, coords, laser);
+}
+
 // Spawns a laser in front of the player of the global space.
 void spawnPlayerLaser()
 {
-    struct entity laser = newEntity(T_LASER, '\'', 1);
-    struct pos spawnPos = getPlayerPos(globalSpace);
-    spawnPos.y--;
-
-    setEntity(globalSpace, spawnPos, laser);
+    spawnLaser(getPlayerPos(globalSpace), 1);
 }
 
-// Moves all lasers up, damaging every entity they collide with.
+// Moves all lasers, damaging every entity they collide with.
 void updateLasers()
 {
     struct entity deadEntity = newEntity(T_INVADER, '.', 0);
+    struct entity current;
+    struct entity nextEntity;
     struct pos currentPos;
+    struct pos nextPos;
 
     for (signed char y = 0; y < globalSpace->height; y++)
     {
@@ -71,29 +82,38 @@ void updateLasers()
         for (signed char x = 0; x < globalSpace->width; x++)
         {
             currentPos.x = x;
-            struct entity current = getEntity(globalSpace, currentPos);
+            current = getEntity(globalSpace, currentPos);
 
             if (current.type == T_LASER)
             {
-                // Laser despawns at upper edge of space
-                if (y == 0)
+                // Laser despawns at upper / lower edge
+                if (y == 0 || y == globalSpace->width - 1)
                 {
                     setEntity(globalSpace, currentPos, deadEntity);
                 }
                 // Move and collide
                 else
                 {
-                    struct entity entityAbove = getEntity(globalSpace, getPos(x, y - 1));
-
-                    if (entityAbove.health > 0)
+                    if (current.moveUp)
                     {
-                        setEntity(globalSpace, getPos(x, y - 1), damageEntity(entityAbove, 1));
+                        nextPos = getPos(x, y - 1);
+                    }
+                    else
+                    {
+                        nextPos = getPos(x, y + 1);
+                    }
+
+                    nextEntity = getEntity(globalSpace, nextPos);
+
+                    if (nextEntity.health > 0)
+                    {
+                        setEntity(globalSpace, nextPos, damageEntity(nextEntity, 1));
                         setEntity(globalSpace, currentPos, deadEntity);
                         updateCanFire();
                     }
                     else
                     {
-                        setEntity(globalSpace, getPos(x, y - 1), current);
+                        setEntity(globalSpace, nextPos, current);
                         setEntity(globalSpace, currentPos, deadEntity);
                     }
                 }
@@ -135,6 +155,38 @@ void updateCanFire()
             entity = getEntity(globalSpace, lowestInvaderPos);
             entity.canFire = 1;
             setEntity(globalSpace, lowestInvaderPos, entity);
+        }
+    }
+}
+
+// Makes some invaders of a the global space shoot.
+void invadersRandomAttack()
+{
+    struct pos currentPos;
+    struct entity entity;
+
+    for (signed char x = 0; x < globalSpace->width; x++)
+    {
+        currentPos.x = x;
+
+        for (signed char y = globalSpace->height - 1; y >= 0; y--)
+        {
+            currentPos.y = y;
+            entity = getEntity(globalSpace, currentPos);
+
+            if (entity.canFire)
+            {
+                srand(time(NULL));
+                int number = rand() % 1000;
+
+                // 1% chance
+                if (number > 10)
+                {
+                    spawnLaser(currentPos, 0);
+                }
+
+                continue;
+            }
         }
     }
 }

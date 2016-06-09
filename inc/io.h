@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include "space.h"
 
-void terminate();
+void terminate(char *message);
 void startVisuals();
 void stopVisuals();
 void drawSpacePadding(struct space *space);
