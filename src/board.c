@@ -21,7 +21,7 @@ struct entity *collision(unsigned x, unsigned y) {
 const struct board *generate_board(unsigned width, unsigned height) {
 	assert(the_board == NULL);
 
-    the_board = malloc(sizeof *the_board);
+    the_board = calloc(1, sizeof *the_board);
     assert(the_board != NULL);
 
     the_board->map = calloc(width * height, sizeof *the_board->map);
@@ -31,6 +31,12 @@ const struct board *generate_board(unsigned width, unsigned height) {
     the_board->height = height;
 
     return the_board;
+}
+
+void destroy_board(void) {
+    free(the_board->map);
+    free(the_board);
+    the_board = NULL;
 }
 
 bool place_entity(struct entity *e) {
