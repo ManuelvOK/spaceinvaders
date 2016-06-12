@@ -63,7 +63,7 @@ struct entity *init_wall(unsigned x, unsigned y);
 struct entity_list *init_list(void);
 void list_add_entity(struct entity_list *l, struct entity *e);
 void list_foreach(struct entity_list *l, void (*f)(struct entity *));
-void list_filter(struct entity_list *l, int (*p)(struct entity *));
+void list_filter(struct entity_list *l, bool (*p)(struct entity *));
 void destroy_list(struct entity_list *l);
 
 #endif /* ifndef ENTITIES_H */

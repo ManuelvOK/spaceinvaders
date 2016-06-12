@@ -68,9 +68,23 @@ void list_foreach(struct entity_list *l, void (*f)(struct entity *)) {
 }
 
 
-void list_filter(struct entity_list *l, int (*p)(struct entity *)) {
-    (void) l;
-    (void) p;
+void list_filter(struct entity_list *l, bool (*p)(struct entity *)) {
+    assert(l != NULL);
+    struct entity_list *nl = init_list();
+    assert(nl != NULL);
+    struct entity *next = NULL;
+    for (struct entity *current = l->first; current != NULL; current = next) {
+        next = current->next;
+        if (p(current)) {
+            current->next = NULL;
+            list_add_entity(nl, current);
+        } else {
+            free(current);
+        }
+    }
+    l->first = nl->first;
+    l->length = nl->length;
+    free(nl);
     return;
 }
 
