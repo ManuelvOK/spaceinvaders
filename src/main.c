@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+
 #include <game.h>
+#include <io.h>
 
 const char *usage = "Usage:\n"
                     "\t./spaceinvaders <savestate>\n";
@@ -21,6 +24,11 @@ int main(int argc, char *argv[]) {
     if (state == NULL) {
         state = new_state();
     }
+
+    init_io();
+    draw_board(state->the_board);
+    getchar();
+    end_io();
 
     if (argc == 2) {
         FILE *savestate = fopen(argv[1], "w");

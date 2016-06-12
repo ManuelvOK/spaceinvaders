@@ -73,6 +73,11 @@ bool read_savestate(FILE *savestate, struct game_state *state) {
                 break;
         }
     }
+    list_filter(state->players, place_entity);
+    list_filter(state->walls, place_entity);
+    for (unsigned i = 0; i < state->n_fighter_rows; ++i) {
+       list_filter(state->fighters[i], place_entity);
+    }
     return true;
 }
 
