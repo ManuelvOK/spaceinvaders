@@ -50,7 +50,8 @@ bool place_entity(struct entity *e) {
 bool move_entity(struct entity *e, enum direction dir) {
     struct position new_pos = next_pos(e->pos, dir);
 
-    if (collision(new_pos.x, new_pos.y) != NULL) {
+    if (out_of_bounds(new_pos.x, new_pos.y)
+        || collision(new_pos.x, new_pos.y) != NULL) {
            return false;
     }
 
