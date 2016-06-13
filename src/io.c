@@ -1,10 +1,11 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../inc/behaviour.h"
 #include "../inc/entity.h"
 #include "../inc/io.h"
 #include "../inc/globals.h"
+#include "../inc/globalSpace.h"
+#include "../inc/spaceExtra.h"
 
 // Ends ncurses and makes the program terminate.
 void terminate(char *message)
@@ -126,7 +127,7 @@ bool handleInput()
     else if (ch == K_LOAD || ch == K_LOAD_ALT)
     {
         setSpace(loadSpaceFromFile());
-        updateCanFire();
+        updateCanFire(getSpace());
     }
 
     return true;

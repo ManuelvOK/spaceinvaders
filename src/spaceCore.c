@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../inc/io.h"
 #include "../inc/globals.h"
-#include "../inc/space.h"
+#include "../inc/spaceCore.h"
 
 // Returns a pointer to a new space on the heap.
 struct space *newSpace(unsigned char width, unsigned char height)

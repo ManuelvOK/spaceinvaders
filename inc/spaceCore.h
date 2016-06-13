@@ -1,5 +1,5 @@
-#ifndef SPACE_H
-#define SPACE_H
+#ifndef SPACE_CORE_H
+#define SPACE_CORE_H
 
 #include <stdbool.h>
 #include "entity.h"

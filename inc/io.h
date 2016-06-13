@@ -2,7 +2,7 @@
 #define IO_H
 
 #include <stdbool.h>
-#include "space.h"
+#include "spaceCore.h"
 
 void terminate(char *message);
 void startVisuals();

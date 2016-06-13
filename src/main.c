@@ -1,9 +1,10 @@
 #include <ncurses.h>
-#include "../inc/behaviour.h"
 #include "../inc/entity.h"
 #include "../inc/io.h"
 #include "../inc/globals.h"
-#include "../inc/space.h"
+#include "../inc/globalSpace.h"
+#include "../inc/spaceCore.h"
+#include "../inc/spaceExtra.h"
 
 int main()
 {
@@ -20,8 +21,8 @@ int main()
 
         drawSpace(getSpace());
         napms(P_REFRESH_SPEED);
-        // invadersRandomAttack();
-        updateLasers();
+        invadersRandomAttack(getSpace());
+        updateLasers(getSpace());
     }
 
     stopVisuals();

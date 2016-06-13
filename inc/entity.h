@@ -16,8 +16,8 @@ struct entity
     unsigned type : 2;
     unsigned symbol : 7;
     unsigned health : 3;
-    unsigned canFire : 1;
-    unsigned moveUp : 1;
+    unsigned canFire : 1;   // Whether invader can fire
+    unsigned moveUp : 1;    // Whether lasers shall move up
     unsigned flag3 : 1;     // Flag names are placeholders
     unsigned flag4 : 1;
 };
