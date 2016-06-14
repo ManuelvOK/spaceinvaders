@@ -117,19 +117,16 @@ void initRandom()
 // Makes a random invader of a space potentially shoot.
 void randomInvaderAttack(struct space *space)
 {
-    unsigned number = rand();
-
     // P_ATTACK_CHANCE % chance
-    if (number % 100 < P_ATTACK_CHANCE)
+    if (rand() % 100 < P_ATTACK_CHANCE)
     {
         struct pos coords;
 
         do
         {
-            unsigned x = number % space->width;
-            unsigned y = number % space->height;
+            unsigned x = rand() % space->width;
+            unsigned y = rand() % space->height;
             coords = (struct pos) { x, y };
-            number = rand();
         }
         while (!getEntity(space, coords).canFire);
 

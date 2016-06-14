@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "../inc/entity.h"
 #include "../inc/io.h"
 #include "../inc/globals.h"
@@ -133,6 +134,16 @@ bool handleInput()
     return true;
 }
 
+// Prints the current time on the screen.
+void printTimeStamp(unsigned char y, unsigned char x)
+{
+    time_t seconds = time(NULL);
+    struct tm tm = *localtime(&seconds);
+
+    mvprintw(y, x, "[%02d/%02d/%04d %02d:%02d.%02d]",
+        tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+}
+
 // Saves the current state of a space to a file.
 void saveSpaceToFile(struct space *space)
 {
@@ -165,7 +176,8 @@ void saveSpaceToFile(struct space *space)
         }
     }
 
-    mvprintw(space->height + 5, 0, "File saved!");
+    printTimeStamp(space->height + 5, 0);
+    printw(": File saved! ");
     fclose(saveFile);
 }
 
@@ -223,6 +235,9 @@ struct space *loadSpaceFromFile()
             setEntity(space, coords, entity);
         }
     }
+
+    printTimeStamp(space->height + 5, 0);
+    printw(": File loaded!");
 
     return space;
 }

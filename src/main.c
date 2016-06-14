@@ -20,9 +20,9 @@ int main()
             break;
         }
 
+        randomInvaderAttack(getSpace());
         drawSpace(getSpace());
         napms(P_REFRESH_SPEED);
-        randomInvaderAttack(getSpace());
         updateLasers(getSpace());
     }
 

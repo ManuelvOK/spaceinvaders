@@ -16,6 +16,7 @@ void setupSpace()
     struct entity block = newEntity(T_BLOCK, '#', 3);
     setPlayer(globalSpace, getPos((unsigned char)(P_WIDTH / 2), P_HEIGHT - 1), player);
 
+    // Invaders
     for (unsigned char x = 1; x < globalSpace->width - 1; x++)
     {
         setEntity(globalSpace, getPos(x, 1), invader);
@@ -23,18 +24,24 @@ void setupSpace()
         setEntity(globalSpace, getPos(x, 5), invader);
     }
 
-    for (unsigned char x = 12; x < 17; x++)
+    // Blocks
+    for (unsigned char x = 3; x <= 7; x++)
     {
-        setEntity(globalSpace, getPos(x, 9), block);
+        setEntity(globalSpace, getPos(x, 13), block);
+        setEntity(globalSpace, getPos(x, 14), block);
     }
 
-    for (unsigned char x = 0; x < globalSpace->width; x++)
+    for (unsigned char x = 12; x <= 17; x++)
     {
-        setEntity(globalSpace, getPos(x, 15), block);
-        setEntity(globalSpace, getPos(x, 16), block);
+        setEntity(globalSpace, getPos(x, 13), block);
+        setEntity(globalSpace, getPos(x, 14), block);
     }
 
-    // TODO: Add more invaders, blocks
+    for (unsigned char x = 22; x <= 26; x++)
+    {
+        setEntity(globalSpace, getPos(x, 13), block);
+        setEntity(globalSpace, getPos(x, 14), block);
+    }
 
     updateCanFire(globalSpace);
 }
