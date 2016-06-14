@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 #include <game.h>
 #include <io.h>
@@ -27,7 +26,13 @@ int main(int argc, char *argv[]) {
 
     init_io();
     draw_board(state->the_board);
-    getchar();
+
+    do {
+        proceed_state(read_input());
+        draw_board(state->the_board);
+        wait_tick();
+    } while (state->game_running == true);
+
     end_io();
 
     if (argc == 2) {

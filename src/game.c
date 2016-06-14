@@ -16,6 +16,7 @@ static struct game_state *empty_state() {
     state->players = init_list();
     state->walls = init_list();
     state->lasers = init_list();
+    state->game_running = true;
 
     return state;
 }
@@ -66,4 +67,14 @@ bool save_state(FILE *savestate) {
     assert(the_state != NULL);
 
     return write_savestate(savestate, the_state);
+}
+
+void proceed_state(enum input i) {
+    switch (i) {
+        case I_LEFT: move_entity(the_state->players->first, D_LEFT); break;
+        case I_RIGHT: move_entity(the_state->players->first, D_RIGHT); break;
+        case I_SAVE: break;
+        case I_QUIT: the_state->game_running = false; break;
+        default: return;
+    }
 }

@@ -54,7 +54,7 @@ void draw_board(const struct board *board) {
                     mvprintw(y + 1, x + 1, "%c", ' ');
                 }
             } else if (board_cache[board->width*y+x]
-                    != board->map[board->width*y+x]->symbol) {
+                       != board->map[board->width*y+x]->symbol) {
                 board_cache[board->width*y+x] = board->map[board->width*y+x]->symbol;
                 mvprintw(y + 1, x + 1, "%c", board_cache[board->width*y+x]);
             }
@@ -65,4 +65,19 @@ void draw_board(const struct board *board) {
 
 void end_io(void) {
     endwin();
+}
+
+enum input read_input(void) {
+    switch (getch()) {
+        case KEY_LEFT:  return I_LEFT;
+        case KEY_RIGHT: return I_RIGHT;
+        case KEY_UP:    return I_SHOOT;
+        case 'w':       return I_SAVE;
+        case 'q':       return I_QUIT;
+        default:        return I_NOP;
+    }
+}
+
+void wait_tick(void) {
+    napms(30);
 }
