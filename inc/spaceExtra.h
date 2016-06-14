@@ -8,6 +8,7 @@ void spawnLaser(struct space *space, struct pos coords, unsigned moveUp);
 void updateLasers(struct space *space);
 void moveInvaders(struct space *space);
 void updateCanFire(struct space *space);
-void invadersRandomAttack(struct space *space);
+void initRandom();
+void randomInvaderAttack(struct space *space);
 
 #endif

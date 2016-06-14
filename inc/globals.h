@@ -11,6 +11,7 @@ enum params
     P_PADDING = 1,          // width of padding
     P_PADDING_CHAR_V = ' ', // char for vertical padding
     P_NO_ENTITY_CHAR = '.', // char for no entity
+    P_ATTACK_CHANCE = 10,   // chance in % of invader attack
 };
 
 enum keyInput

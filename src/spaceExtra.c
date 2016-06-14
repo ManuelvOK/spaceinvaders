@@ -1,5 +1,6 @@
 #include <time.h>
 #include <stdlib.h>
+#include "../inc/globals.h"
 #include "../inc/spaceExtra.h"
 
 // Spawns a laser on a space at given coordinates.
@@ -107,21 +108,31 @@ void updateCanFire(struct space *space)
     }
 }
 
-// Makes some invaders of a space shoot.
-void invadersRandomAttack(struct space *space)
+// Initialises the seed for random numbers.
+void initRandom()
 {
     srand(time(NULL));
+}
 
-    // 100% chance
-    if (rand() % 100 < 100)
+// Makes a random invader of a space potentially shoot.
+void randomInvaderAttack(struct space *space)
+{
+    unsigned number = rand();
+
+    // P_ATTACK_CHANCE % chance
+    if (number % 100 < P_ATTACK_CHANCE)
     {
-        unsigned x = rand() % space->width;
-        unsigned y = rand() % space->height;
-        struct pos coords = { x, y };
+        struct pos coords;
 
-        if (getEntity(space, coords).canFire)
+        do
         {
-            spawnLaser(space, coords, 0);
+            unsigned x = number % space->width;
+            unsigned y = number % space->height;
+            coords = (struct pos) { x, y };
+            number = rand();
         }
+        while (!getEntity(space, coords).canFire);
+
+        spawnLaser(space, coords, 0);
     }
 }

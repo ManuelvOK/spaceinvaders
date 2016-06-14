@@ -11,6 +11,7 @@ int main()
     startVisuals();
     setupSpace();
     drawSpacePadding(getSpace());
+    initRandom();
 
     while (true)
     {
@@ -21,7 +22,7 @@ int main()
 
         drawSpace(getSpace());
         napms(P_REFRESH_SPEED);
-        invadersRandomAttack(getSpace());
+        randomInvaderAttack(getSpace());
         updateLasers(getSpace());
     }
 

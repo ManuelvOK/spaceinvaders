@@ -34,7 +34,6 @@ void setupSpace()
         setEntity(globalSpace, getPos(x, 16), block);
     }
 
-    spawnLaser(globalSpace, getPos(0, 0), 0);
     // TODO: Add more invaders, blocks
 
     updateCanFire(globalSpace);
