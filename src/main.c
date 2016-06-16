@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include <game.h>
 #include <io.h>
@@ -23,6 +24,8 @@ int main(int argc, char *argv[]) {
     if (state == NULL) {
         state = new_state();
     }
+
+    srand(time(NULL));
 
     init_io();
     draw_board(state->the_board);
