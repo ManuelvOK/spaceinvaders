@@ -65,5 +65,6 @@ void list_add_entity(struct entity_list *l, struct entity *e);
 void list_foreach(struct entity_list *l, void (*f)(struct entity *));
 void list_filter(struct entity_list *l, bool (*p)(struct entity *));
 void destroy_list(struct entity_list *l);
+int list_fold(struct entity_list *l, int (*f)(struct entity *, int), int start);
 
 #endif /* ifndef ENTITIES_H */

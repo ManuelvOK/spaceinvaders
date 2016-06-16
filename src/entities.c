@@ -93,3 +93,13 @@ void destroy_list(struct entity_list *l) {
     list_foreach(l, (void(*)(struct entity*)) free);
     free(l);
 }
+
+int list_fold(struct entity_list *l, int (*f)(struct entity *, int), int start) {
+    assert(l != NULL);
+    struct entity *next = NULL;
+    for (struct entity *current = l->first; current != NULL; current = next) {
+        next = current->next;
+        start = f(current, start);
+    }
+    return start;
+}
