@@ -25,8 +25,8 @@ void startVisuals()
     noecho();
     timeout(0);
 
-    mvprintw(P_HEIGHT + 1, 0, "Controls: A - move left, D - move right, SPACEBAR - shoot");
-    mvprintw(P_HEIGHT + 2, 0, "Press ESC to exit");
+    mvprintw(P_HEIGHT + 3, 0, "Controls: A - move left, D - move right, SPACEBAR - shoot");
+    mvprintw(P_HEIGHT + 4, 0, "Press ESC to exit");
 
     refresh();
 }
@@ -37,26 +37,27 @@ void stopVisuals()
     endwin();
 }
 
-// Prints the padding of a space.
-void drawSpacePadding(struct space *space)
+// Prints the static elements of a space.
+void drawSpaceBackground(struct space *space)
 {
     if (space == NULL)
     {
         exit(EXIT_FAILURE);
     }
 
-    if (!P_PADDING)
+    // Draw outline
+    for (unsigned char y = 1; y < space->height + 1; y++)
     {
-        return;
+        mvprintw(y, 0, "%c", P_OUTLINE_CHAR_V);
+        mvprintw(y, (space->width + 1) * (P_PADDING + 1), "%c", P_OUTLINE_CHAR_V);
     }
 
-    // Draw vertical lines
-    for (unsigned char y = 0; y < space->height; y++)
+    unsigned xMax = (space->width + 1) * (P_PADDING + 1) + 1;
+
+    for (unsigned char x = 0; x < xMax; x++)
     {
-        for (unsigned char x = 0; x < space->width; x++)
-        {
-            mvprintw(y, x * (P_PADDING + 1) + 1, "%c", P_PADDING_CHAR_V);
-        }
+        mvprintw(0, x, "%c", P_OUTLINE_CHAR_H);
+        mvprintw(space->height + 1, x, "%c", P_OUTLINE_CHAR_H);
     }
 }
 
@@ -71,6 +72,8 @@ void drawSpace(struct space *space)
     struct entity entity;
     struct pos currentPos;
 
+    // clear();
+
     for (signed char y = 0; y < space->height; y++)
     {
         currentPos.y = y;
@@ -82,7 +85,7 @@ void drawSpace(struct space *space)
 
             if (entity.health == 0)
             {
-                mvprintw(y, x * (P_PADDING + 1), "%c", P_NO_ENTITY_CHAR);
+                mvprintw(y + 1, x * (P_PADDING + 1) + P_PADDING + 1, "%c", P_NO_ENTITY_CHAR);
             }
             else
             {
@@ -91,7 +94,7 @@ void drawSpace(struct space *space)
                     attron(A_BOLD);
                 }
 
-                mvprintw(y, x * (P_PADDING + 1), "%c", entity.symbol);
+                mvprintw(y + 1, x * (P_PADDING + 1) + P_PADDING + 1, "%c", entity.symbol);
                 attroff(A_BOLD);
             }
         }

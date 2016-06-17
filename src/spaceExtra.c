@@ -1,5 +1,5 @@
-#include <time.h>
 #include <stdlib.h>
+#include <time.h>
 #include "../inc/globals.h"
 #include "../inc/spaceExtra.h"
 
@@ -133,3 +133,20 @@ void randomInvaderAttack(struct space *space)
         spawnLaser(space, coords, 0);
     }
 }
+
+/*
+void moveInvaders(struct space *space, unsigned dir)
+{
+    struct pos currentPos;
+
+    for (signed char y = 0; y < space->height; y++)
+    {
+        currentPos.y = y;
+
+        for (signed char x = 0; x < space->width; x++)
+        {
+            currentPos.x = x;
+        }
+    }
+}
+*/

@@ -11,6 +11,14 @@ enum entityType
     T_PLAYER = 3,
 };
 
+enum dir
+{
+    D_UP = 0,
+    D_DOWN = 1,
+    D_LEFT = 2,
+    D_RIGHT = 3,
+};
+
 struct entity
 {
     unsigned type : 2;

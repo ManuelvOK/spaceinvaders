@@ -9,8 +9,9 @@ enum params
     P_HEIGHT = 20,          // height of space
     P_REFRESH_SPEED = 100,  // 100ms
     P_PADDING = 1,          // width of padding
-    P_PADDING_CHAR_V = ' ', // char for vertical padding
     P_NO_ENTITY_CHAR = '.', // char for no entity
+    P_OUTLINE_CHAR_V = '|', // char for vertical outline
+    P_OUTLINE_CHAR_H = '=', // char for horizontal outline
     P_ATTACK_CHANCE = 10,   // chance in % of invader attack
 };
 

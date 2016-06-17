@@ -10,7 +10,7 @@ int main()
 {
     startVisuals();
     setupSpace();
-    drawSpacePadding(getSpace());
+    drawSpaceBackground(getSpace());
     initRandom();
 
     while (true)
