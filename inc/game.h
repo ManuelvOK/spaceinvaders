@@ -28,5 +28,6 @@ const struct game_state *new_state(void);
 bool save_state(FILE *savestate);
 
 void proceed_state(enum input i);
+void move_fighters(void);
 
 #endif /* ifndef GAME_H */

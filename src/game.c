@@ -72,9 +72,7 @@ bool save_state(FILE *savestate) {
 void proceed_state(enum input i) {
     static int fighter_move_tick = 0;
     if (fighter_move_tick++ % 4 == 0) {
-        for (struct entity *e = the_state->fighters[0]->first; e != NULL; e = e->next) {
-            move_entity(e, D_RIGHT);
-        }
+        move_fighters();
     }
     switch (i) {
         case I_LEFT: move_entity(the_state->players->first, D_LEFT); break;
@@ -83,4 +81,32 @@ void proceed_state(enum input i) {
         case I_QUIT: the_state->game_running = false; break;
         default: return;
     }
+}
+
+void move_fighters(void) {
+    static enum direction cur_dir = D_RIGHT;
+    static unsigned cur_row = 0;
+    struct entity_list *cur_list = the_state->fighters[cur_row];
+    if (cur_list->first != NULL) {
+        unsigned row_y = cur_list->first->pos.y;
+        unsigned b_width = the_state->the_board->width;
+        if (cur_dir == D_RIGHT) {
+            struct entity *to_check = the_state->the_board->map[row_y *
+                                            b_width + b_width -1];
+            if (to_check != NULL && to_check->type == E_FIGHTER) {
+                cur_dir = D_LEFT;
+            }
+        } else {
+            struct entity *to_check = the_state->the_board->map[row_y * b_width];
+            if (to_check != NULL && to_check->type == E_FIGHTER) {
+                cur_dir = D_RIGHT;
+            }
+        }
+        for (struct entity *e = the_state->fighters[cur_row]->first;
+                e != NULL;
+                e = e->next) {
+            move_entity(e, cur_dir);
+        }
+    }
+    cur_row = (cur_row + 1) % the_state->n_fighter_rows;
 }
