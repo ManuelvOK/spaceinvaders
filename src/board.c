@@ -40,7 +40,8 @@ void destroy_board(void) {
 }
 
 bool place_entity(struct entity *e) {
-    if (collision(e->pos.x, e->pos.y) || !e->valid) {
+    if (out_of_bounds(e->pos.x, e->pos.y)
+        || collision(e->pos.x, e->pos.y) || !e->valid) {
         return false;
     }
     the_board->map[the_board->width * e->pos.y + e->pos.x] = e;
