@@ -21,6 +21,9 @@ static struct game_state *empty_state() {
     return state;
 }
 
+static void emit_laser(struct entity *origin) {
+}
+
 const struct game_state *load_state(FILE *savestate) {
     assert(the_state == NULL);
     the_state = empty_state();
@@ -70,15 +73,12 @@ bool save_state(FILE *savestate) {
 }
 
 void proceed_state(enum input i) {
-    static int fighter_move_tick = 0;
-    if (fighter_move_tick++ % 4 == 0) {
-        move_fighters();
-    }
     switch (i) {
         case I_LEFT: move_entity(the_state->players->first, D_LEFT); break;
         case I_RIGHT: move_entity(the_state->players->first, D_RIGHT); break;
         case I_SAVE: break;
         case I_QUIT: the_state->game_running = false; break;
+        case I_SHOOT: emit_laser(the_state->players->first); break;
         default: return;
     }
 }
