@@ -9,6 +9,10 @@
 
 static struct game_state *the_state;
 
+int player_has_laser(struct entity *laser, int accu) {
+    return accu || (laser->valid && laser->ent.as_laser.dir == D_UP);
+}
+
 static struct game_state *empty_state() {
     struct game_state *state =  calloc(1, sizeof *the_state);
     assert(state != NULL);
@@ -22,6 +26,46 @@ static struct game_state *empty_state() {
 }
 
 static void emit_laser(struct entity *origin) {
+    assert(origin != NULL);
+    enum direction laser_dir;
+    struct position spawn_pos;
+    if (origin->type == E_PLAYER) {
+        if (list_fold(the_state->lasers, player_has_laser, 0)) {
+            return;
+        }
+        laser_dir = D_UP;
+        spawn_pos.x = origin->pos.x;
+        spawn_pos.y = origin->pos.y - 1;
+    } else if (origin->type == E_FIGHTER) {
+        laser_dir = D_DOWN;
+        spawn_pos.x = origin->pos.x;
+        spawn_pos.y = origin->pos.y + 1;
+    } else {
+        return;
+    }
+
+    assert(!out_of_bounds(spawn_pos.x, spawn_pos.y));
+    struct entity *laser = init_laser(spawn_pos.x, spawn_pos.y, laser_dir);
+    list_add_entity(the_state->lasers, laser);
+
+    struct entity *hit_entity = collision(spawn_pos.x, spawn_pos.y);
+    if (hit_entity) {
+        // TODO destroy
+    }
+
+    place_entity(laser);
+}
+
+static void move_laser(struct entity *laser) {
+    assert(laser != NULL);
+    assert(laser->type == E_LASER);
+    struct position next_pos = {.x = laser->pos.x,
+                                .y = laser->ent.as_laser.dir == D_UP
+                                     ? laser->pos.y - 1
+                                     : laser->pos.y + 1};
+    if (!collision(next_pos.x, next_pos.y)) {
+        move_entity(laser, laser->ent.as_laser.dir);
+    }
 }
 
 const struct game_state *load_state(FILE *savestate) {
@@ -109,4 +153,8 @@ void move_fighters(void) {
         }
     }
     cur_row = (cur_row + 1) % the_state->n_fighter_rows;
+}
+
+void move_lasers(void) {
+    list_foreach(the_state->lasers, move_laser);
 }

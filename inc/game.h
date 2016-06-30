@@ -29,5 +29,6 @@ bool save_state(FILE *savestate);
 
 void proceed_state(enum input i);
 void move_fighters(void);
+void move_lasers(void);
 
 #endif /* ifndef GAME_H */

@@ -12,8 +12,8 @@ CLDEP	=$(SRC:%.c=%.d-e)
 OBJ		=$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 INC		=-I./$(INCDIR)/
 
-CFLAGS	=-std=c99 ${INC} -Wall -Wextra -Wpedantic -Werror -O3
-LDFLAGS	=-lncurses -lpthread
+CFLAGS	+=-std=c99 ${INC} -Wall -Wextra -Wpedantic -Werror -O3 -D_GNU_SOURCE
+LDFLAGS	+=-lncurses -lpthread
 
 VPATH 	=$(SRCDIR)
 

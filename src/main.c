@@ -11,6 +11,7 @@ const char *usage = "Usage:\n"
                     "\t./spaceinvaders <savestate>\n";
 
 void *move_fighter_thread(void *retval);
+void *move_laser_thread(void *retval);
 
 static pthread_mutex_t board_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -33,8 +34,10 @@ int main(int argc, char *argv[]) {
 
     srand(time(NULL));
 
-    pthread_t tid;
-    assert(pthread_create(&tid, NULL, move_fighter_thread, NULL) == 0);
+    pthread_t fighter_tid;
+    assert(pthread_create(&fighter_tid, NULL, move_fighter_thread, NULL) == 0);
+    pthread_t laser_tid;
+    assert(pthread_create(&laser_tid, NULL, move_laser_thread, NULL) == 0);
 
     init_io();
     draw_board(state->the_board);
@@ -68,6 +71,21 @@ void *move_fighter_thread(void *arg) {
         pthread_mutex_lock(&board_mutex);
         move_fighters();
         pthread_mutex_unlock(&board_mutex);
+        pthread_yield();
+    }
+    return NULL;
+}
+
+void *move_laser_thread(void *arg) {
+    (void) arg;
+    for (;;) {
+        for (unsigned i = 0; i < 16; ++i) {
+            wait_tick();
+        }
+        pthread_mutex_lock(&board_mutex);
+        move_lasers();
+        pthread_mutex_unlock(&board_mutex);
+        pthread_yield();
     }
     return NULL;
 }
